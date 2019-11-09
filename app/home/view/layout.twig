@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>layout 后台大布局 - Layui</title>
+    <link rel="icon" href="{{ load('rain/image/logo.png') }}">
+    <link rel="stylesheet" href="{{ load('layui/css/layui.css') }}">
+    <link rel="stylesheet" href="{{ load('rain/css/app.css') }}">
+    {% block css %}{% endblock %}
+</head>
+<body class="layui-layout-body layui-bg-gray">
+<div class="layui-layout">
+    {% block body %}
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        {% block head %}
+            {% include 'widget/header.twig' %}
+        {% endblock %}
+        <!-- 内容主体区域 -->
+        {% block main %}{% endblock %}
+        <!-- 底部固定区域 -->
+        {% block footer %}
+            {% include 'widget/footer.twig' %}
+        {% endblock %}
+    {% endblock %}
+</div>
+<script src="{{ load('jquery/jquery-3.4.1.js') }}"></script>
+<script src="{{ load('layui/layui.js') }}"></script>
+<script src="{{ load('rain/js/app.js') }}"></script>
+{{ renderer.renderHead() }}
+{% block js %}{% endblock %}
+<script>{{ flash() }}</script>
+</body>
+</html>

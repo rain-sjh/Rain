@@ -1,0 +1,25 @@
+<div class="layui-header layui-bg-cyan">
+    <a class="layui-logo" href="{{ url('/admin') }}">layui 后台布局</a>
+    <ul class="layui-nav layui-layout-left" lay-shrink="all">
+        <li class="layui-nav-item {{ is_controller('user','layui-this') }}">
+            <a href="{{ url('user/list') }}">
+                <i class="layui-icon layui-icon-user"></i> 用户
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="{{ url('setting/site') }}">
+                <i class="layui-icon layui-icon-util"></i> 系统
+            </a>
+        </li>
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item" lay-unselect>
+            <a href="javascript:">
+                <img lay-src="{{ avatar(userInfo.avatar,userInfo.gender) }}" class="layui-nav-img">{{ userInfo.nickname }}
+            </a>
+        </li>
+        <li class="layui-nav-item" lay-unselect>
+            <a href="javascript:" onclick="$.Get('{{ url('/logout') }}')">退出</a>
+        </li>
+    </ul>
+</div>

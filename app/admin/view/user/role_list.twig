@@ -1,0 +1,24 @@
+{% extends 'layout.twig' %}
+
+{% block main %}
+    <div class="layui-body layui-box">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span>角色列表</span>
+                <div class="layui-right">
+                    <button type="button" class="layui-btn layui-btn-sm"
+                            onclick="$.Modal('{{ url('user/add') }}')">
+                        <i class="layui-icon">&#xe654;</i> 添加角色
+                    </button>
+                </div>
+            </div>
+            <div class="layui-card-body">
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

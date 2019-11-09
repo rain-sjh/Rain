@@ -1,0 +1,45 @@
+{% extends 'model.twig' %}
+
+{% block head %}添加用户{% endblock %}
+
+{% block body %}
+    <div class="layui-form-item">
+        <label for="nickname" class="layui-form-label">昵称</label>
+        <div class="layui-input-inline">
+            <input id="nickname" type="text" name="nickname" lay-verify="required" placeholder="请输入昵称"
+                   autocomplete="off" class="layui-input" lay-reqText="请输入昵称">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="username" class="layui-form-label">用户名</label>
+        <div class="layui-input-inline">
+            <input id="username" type="text" name="username" lay-verify="required" placeholder="请输入用户名"
+                   autocomplete="off" class="layui-input" lay-reqText="请输入用户名">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="password" class="layui-form-label">密码</label>
+        <div class="layui-input-inline">
+            <input id="password" type="text" name="password" lay-verify="required" placeholder="请输入密码"
+                   autocomplete="off" class="layui-input" lay-reqText="请输入密码">
+        </div>
+    </div>
+    <div class="layui-form-item" lay-filter="sex">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="radio" name="gender" value="0" title="保密" checked>
+            <input type="radio" name="gender" value="1" title="男">
+            <input type="radio" name="gender" value="2" title="女">
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <button type="button" lay-submit lay-filter="addUser" class="layui-btn layui-btn-sm">添加</button>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $.Form('addUser', '{{ url('user/add') }}');
+    </script>
+{% endblock %}

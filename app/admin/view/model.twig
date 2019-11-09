@@ -1,0 +1,17 @@
+<div class="layui-card layui-form">
+    <div class="layui-card-header">
+        {% block head %}{% endblock %}
+    </div>
+    <div class="layui-card-body">
+        {% block body %}
+        {% endblock %}
+    </div>
+    <div class="layui-card-footer">
+        <div class="layui-btn-container layui-right">
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" onclick="layer.closeAll('page')">取消</button>
+            {% block footer %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+{% block js %}{% endblock %}

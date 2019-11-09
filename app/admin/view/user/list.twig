@@ -1,0 +1,81 @@
+{% extends 'layout.twig' %}
+
+{% block main %}
+    <div class="layui-body layui-box">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span>用户列表</span>
+                <div class="layui-right">
+                    <button type="button" class="layui-btn layui-btn-sm"
+                            onclick="$.Modal('{{ url('user/add') }}')">
+                        <i class="layui-icon">&#xe654;</i> 添加用户
+                    </button>
+                </div>
+            </div>
+            <div class="layui-card-body">
+                <form class="layui-form">
+                    <table class="layui-table" lay-even="" lay-skin="row">
+                        <thead>
+                        <tr>
+                            <th>昵称</th>
+                            <th>用户名</th>
+                            <th>电话</th>
+                            <th>所在组</th>
+                            <th>用户状态</th>
+                            <th>注册时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in list %}
+                            <tr>
+                                <td>
+                                    <img lay-src="{{ avatar(user.avatar,user.gender) }}" class="layui-nav-img">
+                                    <span style="display: inline-block;">{{ user.nickname|default('-') }}</span>
+                                </td>
+                                <td>{{ user.username|default('-') }}</td>
+                                <td>{{ user.phone|default('-') }}</td>
+                                <td class="select-box">
+                                    <label>
+                                        <select class="select" lay-filter="competence">
+                                            <option>游客</option>
+                                            <option selected>管理员</option>
+                                        </select>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" lay-skin="switch"
+                                               lay-text="启用|禁用" {{ user.status?'':'checked' }} lay-filter="status"
+                                               data-id="{{ user.id }}">
+                                    </label>
+                                </td>
+                                <td>
+                                    {{ user.create_time }}<br>{{ user.ip|default('-') }} ({{ user.ip|getCity }})
+                                </td>
+                                <td class="link-item">
+                                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm"
+                                            onclick="$.Modal('{{ url('user/edit',{id:user.id}) }}')">编辑
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        layui.use(['form'], function () {
+            let form = layui.form;
+            form.on('switch(status)', function (data) {
+                let userId = $(data.elem).data('id');
+                $.Get('{{ url('user/status') }}', {id: userId, status: data.elem.checked})
+            });
+        });
+    </script>
+{% endblock %}

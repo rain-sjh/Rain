@@ -1,0 +1,69 @@
+{% extends 'model.twig' %}
+
+{% block head %}用户信息{% endblock %}
+
+{% block body %}
+    <input type="hidden" name="id" value="{{ user.id }}">
+    <div class="layui-text-center">
+        <img id="avatar" lay-src="{{ avatar(user.avatar,user.gender) }}" alt="" class="layui-nav-img layui-avatar">
+    </div>
+    <div class="layui-form-item">
+        <label for="nickname" class="layui-form-label">昵称</label>
+        <div class="layui-input-inline">
+            <input id="nickname" type="text" name="nickname" lay-verify="required" placeholder="请输入昵称"
+                   autocomplete="off" class="layui-input" lay-reqText="请输入昵称" value="{{ user.nickname }}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="username" class="layui-form-label">用户名</label>
+        <div class="layui-input-inline">
+            <input id="username" type="text" class="layui-input" value="{{ user.username }}" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="password" class="layui-form-label">密码</label>
+        <div class="layui-input-inline">
+            <input id="password" type="password" name="password" class="layui-input" placeholder="为空则不修改">
+        </div>
+    </div>
+    <div class="layui-form-item" lay-filter="sex">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            {% for key,item in ['保密','男','女'] %}
+                <input type="radio" name="gender" value="{{ key }}" title="{{ item }}" {{ user.gender==key?'checked' }}>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="phone" class="layui-form-label">手机</label>
+        <div class="layui-input-inline">
+            <input id="phone" type="text" name="phone" placeholder="请输入手机" class="layui-input" value="{{ user.phone }}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="birthday" class="layui-form-label">生日</label>
+        <div class="layui-input-inline">
+            <input id="birthday" type="text" name="birthday" placeholder="请输入生日" class="layui-input"
+                   value="{{ user.birthday }}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="summary" class="layui-form-label">简介</label>
+        <div class="layui-input-inline">
+            <textarea id="summary" name="summary" placeholder="请输入简介"
+                      class="layui-textarea">{{ user.summary }}</textarea>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    <button type="button" lay-submit lay-filter="addUser" class="layui-btn layui-btn-sm">保存</button>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $.Upload('#avatar');
+        $.Form('addUser', '{{ url('user/edit') }}');
+    </script>
+{% endblock %}

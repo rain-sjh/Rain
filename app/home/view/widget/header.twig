@@ -1,0 +1,43 @@
+<div class="layui-header layui-bg-white">
+	<div class="layui-container layui-row">
+		<div class="layui-col-md2">
+			<a href="{{ url('/') }}">
+                <span class="layui-icon layui-icon-water"
+                      style="font-size: 30px;line-height: 2; color: #01AAED;"> 雨点</span>
+			</a>
+		</div>
+		<div class="layui-col-md8">
+			<ul class="layui-nav layui-bg-white">
+				<li class="layui-nav-item layui-this">
+					<a href="{{ url('/') }}">首页</a>
+				</li>
+			</ul>
+		</div>
+		<div class="layui-col-md2">
+			{% if userInfo %}
+				<ul class="layui-nav layui-bg-white">
+					<li class="layui-nav-item">
+						<a href="javascript:">
+							<img lay-src="{{ avatar(userInfo.avatar,userInfo.gender) }}" class="layui-nav-img"
+							     alt=""> {{ userInfo.nickname }}
+						</a>
+						<dl class="layui-nav-child">
+							<dd><a href="javascript:">修改信息</a></dd>
+							<dd><a href="javascript:">安全管理</a></dd>
+							<dd><a href="{{ url('/admin') }}" target="_blank">后台管理</a></dd>
+							<dd><a href="javascript:" onclick="$.Get('{{ url('/logout') }}')">退出</a></dd>
+						</dl>
+					</li>
+				</ul>
+			{% else %}
+				<ul class="layui-nav layui-bg-white">
+					<li class="layui-nav-item">
+						<a href="{{ url('/login') }}">
+							<span class="layui-icon layui-icon-auz"></span> 登录
+						</a>
+					</li>
+				</ul>
+			{% endif %}
+		</div>
+	</div>
+</div>

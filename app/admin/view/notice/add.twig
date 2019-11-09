@@ -1,0 +1,29 @@
+{% extends 'model.twig' %}
+
+{% block head %}发布公告{% endblock %}
+
+{% block body %}
+    <div style="width: 500px;">
+        <div class="layui-form-item">
+            <label>
+                <input type="text" name="title" lay-verify="required" placeholder="请输入标题" autocomplete="off"
+                       class="layui-input" lay-reqtext="标题不能为空">
+            </label>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label>
+                <textarea name="content" placeholder="请输入内容" class="layui-textarea" lay-verify="required"  lay-reqtext="内容不能为空"></textarea>
+            </label>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <button type="button" lay-submit lay-filter="addNotice" class="layui-btn layui-btn-sm">添加</button>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $.Form('addNotice', '{{ url('notice/add') }}');
+    </script>
+{% endblock %}
