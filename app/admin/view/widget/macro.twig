@@ -1,0 +1,20 @@
+{% macro upload(param) %}
+    <div class="layui-upload">
+        <div class="layui-upload-list">
+{#            {% set size = explode('*',size) %}#}
+            <img class="layui-upload-img" lay-src="{{ image(param.url|default()) }}" alt="" width="{{ param.w|default() }}"
+                 height="{{ param.h|default() }}">
+            <input class="layui-upload-item" type="hidden" name="{{ param.name|default() }}"
+                   value="{{ param.url|default() }}">
+        </div>
+        <div class="layui-btn-group">
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal layui-btn-upload">
+                <i class="layui-icon">&#xe67c;</i>上传
+            </button>
+            <button type="button"
+                    class="layui-btn layui-btn-sm layui-btn-retry layui-btn-primary layui-hide">
+                <i class="layui-icon">&#xe669;</i>重试
+            </button>
+        </div>
+    </div>
+{% endmacro %}

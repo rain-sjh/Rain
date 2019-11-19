@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * 工具: PhpStorm
  * 作者: 孙家浩
@@ -11,39 +12,39 @@
 namespace app\middleware;
 
 
+use app\model\Config;
+use app\model\Menu;
 use app\model\User;
 use Closure;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
-use think\facade\View;
 use app\Request;
+use think\response\Json;
 
 class Role
 {
-	/** @var array 放行列表 */
+	/**
+	 * 放行名单
+	 * @var array
+	 */
 	protected $allow = [
 		'home' => [
-			'' => [
-				''
-			],
-			'Auth' => [
-				'login'
-			],
-			'Index' => [
-				'index',
-			]
+			'',
+			'login',
+			'captcha',
+			'Index/index'
 		],
 		'common' => [
-			'Upload' => [
-				'image'
-			]
+			'Upload/image'
 		]
 	];
-
-	protected $user;
+	private $user;
+	private $menus;
+	private $config;
 
 	/**
+	 * 初始化
 	 * @param Request $request
 	 * @param Closure $next
 	 * @return mixed
@@ -53,22 +54,23 @@ class Role
 	 */
 	public function handle(Request $request, Closure $next)
 	{
-		$this->verifyToken();
-		$this->verifyWhitelist();
+		$request = $this->verifyToken($request);
 
-		View::assign('userInfo',$this->user);
-		$request->user = $this->user;
+		$request = $this->verifyWhitelist($request);
+
+		$request = $this->config($request);
 		return $next($request);
 	}
 
 	/**
 	 * 验证TOKEN 并返回 用户信息
-	 * @return bool
+	 * @param $request
+	 * @return mixed
 	 * @throws DataNotFoundException
 	 * @throws DbException
 	 * @throws ModelNotFoundException
 	 */
-	public function verifyToken()
+	private function verifyToken($request)
 	{
 		// 当cookie存在token信息则自动登录
 		if (!empty(cookie('token'))) {
@@ -76,27 +78,36 @@ class Role
 		}
 		// 读取token
 		$token = session('token');
-		// 读取用户信息
-		$this->user = User::where('token', $token)
-			->field('id,avatar,nickname,username,gender,token')
-			->find();
-
-		return true;
+		if ($token) {
+			// 读取用户信息
+			$user = new User();
+			$this->user = $user->where('token', $token)
+				->field('id,avatar,nickname,username,gender,token')
+				->find();
+		}
+		$request->userInfo = $this->user;
+		return $request;
 	}
 
-	public function verifyWhitelist()
+	/**
+	 * 登录权限管理
+	 * @param $request
+	 * @return Json|void
+	 * @throws DataNotFoundException
+	 * @throws DbException
+	 * @throws ModelNotFoundException
+	 */
+	private function verifyWhitelist($request)
 	{
 		// 当前应用
 		$app = app('http')->getName();
 		// 当前控制器
-		$controller = request()->controller();
-		// 当前方法
-		$action = request()->action();
+		$path = request()->pathinfo();
 		// 白名单
-		$allow = isset($this->allow[$app][$controller]) ? $this->allow[$app][$controller] : [];
+		$allow = isset($this->allow[$app]) ? $this->allow[$app] : [];
 		// 不在白名单,验证登录身份
-		if (!in_array($action, $allow)) {
-			if (empty($user)) {
+		if (!in_array($path, $allow)) {
+			if (empty($this->user)) {
 				// 设置session标记完成
 				session('complete', true);
 				if (request()->isAjax()) return error(407);
@@ -104,7 +115,72 @@ class Role
 			}
 		}
 
-		return true;
+		$Menu = new Menu();
+
+		$menus = $Menu->order('sort create_time')
+			->select()->toArray();
+
+		foreach ($menus as $item) {
+			if (empty($item['parent_id']) && empty($item['path'])) {
+				$tabs = $Menu->order('sort create_time')
+					->getByParentId($item['id']);
+				if (!empty($tabs)) {
+					if (empty($tabs->path)) {
+						$tabs = $Menu->order('sort create_time')
+							->getByParentId($tabs->id);
+					}
+					$item['path'] = isset($tabs->path)?$tabs->path:'';
+				}
+				$this->menus['menu'][] = $item;
+			} elseif (empty($item['parent_id'])) {
+				$this->menus['menu'][] = $item;
+			}
+		}
+
+		$default_app = \think\facade\Config::get('app.default_app');
+		if ($default_app != $app) $default_path = '/' . $app; else $default_path = '/';
+		$path = request()->pathinfo() ? request()->pathinfo() : $default_path;
+		$menu = $Menu->getByPath($path);
+		if (!empty($menu->parent_id)) {
+			$parent = $Menu->getById($menu['parent_id']);
+			if (empty($parent['parent_id'])) {
+				$tab = $parent['id'];
+			} else {
+				$tab = $parent['parent_id'];
+			}
+			foreach ($menus as $item) {
+				if ($item['parent_id'] == $tab) {
+					$this->menus['tabs'][$item['id']] = $item;
+					foreach ($menus as $i) {
+						if ($i['parent_id'] == $item['id']) {
+							$this->menus['tabs'][$item['id']]['data'][] = $i;
+						}
+					}
+				}
+			}
+		}
+
+		$request->menuInfo = $this->menus;
+
+		return $request;
+	}
+
+	/**
+	 *  获取系统配置
+	 * @param $request
+	 * @return array
+	 */
+	private function config($request)
+	{
+		$config = new Config();
+		$config = $config->column('content', 'key');
+
+		foreach ($config as &$item) {
+			$item = json_decode($item);
+		}
+
+		$this->config = $config;
+		return $request->configInfo = $this->config;
 	}
 
 }

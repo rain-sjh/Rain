@@ -1,17 +1,140 @@
+{% import 'widget/macro.twig' as macro %}
+
 {% extends 'layout.twig' %}
 
 {% block side %}
     {% include 'widget/side.twig' %}
 {% endblock %}
 
+{% set tab_title = '系统设置' %}
+
 {% block main %}
-    <div class="layui-body layui-box">
-        <div class="layui-card">
-            <div class="layui-card-header">
-                <span>站点设置</span>
-            </div>
-            <div class="layui-card-body">
+    <form class="layui-form" action="">
+
+        <div class="layui-form-item">
+            <label for="title" class="layui-form-label">网站名称</label>
+            <div class="layui-input-block">
+                <input id="title" type="text" name="title" lay-verify="required" placeholder="请输入系统名称"
+                       autocomplete="off" class="layui-input" lay-reqText="请输入系统名称" value="{{ site.title }}">
             </div>
         </div>
-    </div>
+
+        <div class="layui-form-item">
+            <label for="slogan" class="layui-form-label">网站副标题</label>
+            <div class="layui-input-block">
+                <input id="slogan" type="text" name="slogan" lay-verify="required" placeholder="请输入网站副标题"
+                       autocomplete="off" class="layui-input" lay-reqText="请输入网站副标题" value="{{ site.slogan }}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="url" class="layui-form-label">网站域名</label>
+            <div class="layui-input-block">
+                <input id="url" type="text" name="url" placeholder="请输入网站网站域名"
+                       autocomplete="off" class="layui-input" value="{{ site.url }}">
+                <div class="layui-form-mid layui-word-aux">以"http://"开头</div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="logo" class="layui-form-label">网站LOGO</label>
+            <div class="layui-input-block">
+                {{ macro.upload({name:'logo',url:site.logo,h:'50'}) }}
+                <div class="layui-form-mid layui-word-aux layui-text">
+                    <span>请上传png, gif, jpg格式的图片文件. LOGO图片建议不要超过250*50. 网校logo设置后显示顶部导航左上角.</span>
+                    <a href="{{ url('/') }}" target="_blank"> 点击查看</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="favicon" class="layui-form-label">浏览器图标</label>
+            <div class="layui-input-block">
+                {{ macro.upload({name:'favicon',url:site.favicon,h:'32'}) }}
+                <div class="layui-form-mid layui-word-aux layui-text">
+                    <span>请上传ico格式的图标文件, 建议大小16*16或者32*32.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="seo_keywords" class="layui-form-label">SEO关键词</label>
+            <div class="layui-input-block">
+                <input id="seo_keywords" type="text" name="seo_keywords" placeholder="请输入SEO关键词"
+                       autocomplete="off" class="layui-input" value="{{ site.seo_keywords }}">
+                <div class="layui-form-mid layui-word-aux">设置多个关键词请用半角逗号","隔开.</div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="seo_description" class="layui-form-label">SEO描述</label>
+            <div class="layui-input-block">
+                <input id="seo_description" type="text" name="seo_description" placeholder="请输入SEO描述信息"
+                       autocomplete="off" class="layui-input" value="{{ site.seo_description }}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="master_email" class="layui-form-label">管理员邮箱</label>
+            <div class="layui-input-block">
+                <input id="master_email" type="text" name="master_email" placeholder="请输入管理员邮箱地址" autocomplete="off"
+                       class="layui-input" value="{{ site.master_email }}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="master_email" class="layui-form-label">内容版权方</label>
+            <div class="layui-input-block">
+                <input id="master_email" type="text" name="master_email" placeholder="请输入内容版权方" autocomplete="off"
+                       class="layui-input" value="{{ site.master_email }}">
+                <div class="layui-form-mid layui-word-aux">您可以填写网站名称或公司名称.</div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="icp" class="layui-form-label">ICP备案号</label>
+            <div class="layui-input-block">
+                <input id="icp" type="text" name="icp" placeholder="请输入ICP备案号" autocomplete="off" class="layui-input"
+                       value="{{ site.icp }}">
+            </div>
+        </div>
+
+        <div class="layui-site-title">
+            <fieldset>
+                <legend>网站统计分析代码部署</legend>
+            </fieldset>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label for="desc" class="layui-form-label">JS统计分析</label>
+            <div class="layui-input-block">
+                <textarea id="desc" name="desc" placeholder="请输入统计分析代码"
+                          class="layui-textarea">{{ site.desc }}</textarea>
+                <div class="layui-form-mid layui-word-aux layui-text">
+                    <p>统计代码是网站统计软件发布的一段代码, 用以统计添加统计代码的网站的数据. </p>
+                    <p>包括网站的访客来源, 从哪个网页跳转到此网站, 搜索什么关键词到网站, 一共有多少人访问, 每天多少人多少IP, 平均访问时间是多少等等数据. </p>
+                    <p>统计分析工具可以分析网校访问趋势, 以及根据数据做推广调整, 优化网校资源, 建议使用
+                        <a href="http://tongji.baidu.com" target="_blank">百度统计</a>/
+                        <a href="http://ta.qq.com/" target="_blank">腾讯分析</a>/
+                        <a target="_blank" href="http://www.umeng.com/">CNZZ</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="siteForm">保存</button>
+            </div>
+        </div>
+    </form>
+
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $.Form('siteForm');
+    </script>
 {% endblock %}

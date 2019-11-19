@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
@@ -13,6 +14,4 @@ namespace app;
 
 class Request extends \think\Request
 {
-
-	public $user;
 }

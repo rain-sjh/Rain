@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * 工具: PhpStorm
  * 作者: 孙家浩
@@ -13,31 +14,46 @@ namespace app\home\controller;
 
 use app\common\controller\Base;
 use app\model\User;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\Request;
+use think\response\Json;
+use think\response\Redirect;
+use think\response\View;
 
 class Auth extends Base
 {
-	public function login(Request $request)
+	/**
+	 * @param Request $request
+	 * @param User $User
+	 * @return Json|Redirect|View
+	 * @throws DataNotFoundException
+	 * @throws DbException
+	 * @throws ModelNotFoundException
+	 */
+	public function login(Request $request, User $User)
 	{
-		if (Request()->isPost()) {
-			$param = Request()->post();
+		if ($request->isPost()) {
+			$param = $request->post();
 
 			if (!captcha_check($param['code'])) {
 				return error(405);
 			}
 
-			$user = User::getByUsername($param['username']);
+			$user = $User->getByUsername($param['username']);
 
 			if (empty($user)) {
 				return error(406, '您输入的账号不存在!');
 			}
 
-			if (!password_verify($param['password'], $user['password'])) {
+			if (!password_verify($param['password'], $user->password)) {
 				return error(406, '您输入的密码不正确!');
 			}
 
 			$token = md5(uniqid(rand(), true));
 
+			$user = $User->find($user->id);
 			$user->token = $token;
 			$user->ip = getIP();
 			$user->save();
@@ -51,8 +67,7 @@ class Auth extends Base
 			return success('', '登录成功!');
 		}
 
-		if (!empty($request->user)) {
-			$this->error('请不要重复登录!');
+		if (!empty($request->userInfo)) {
 			if (session('?complete')) {
 				// 删除session
 				session('complete', null);
@@ -64,6 +79,10 @@ class Auth extends Base
 		return view('login');
 	}
 
+	/**
+	 * 退出登录
+	 * @return Json
+	 */
 	public function logout()
 	{
 		session('token', false);
@@ -71,8 +90,4 @@ class Auth extends Base
 		return success('', '退出成功!');
 	}
 
-	public function verify()
-	{
-		return captcha();
-	}
 }

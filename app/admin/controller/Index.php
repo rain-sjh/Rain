@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * 工具: PhpStorm
  * 作者: 孙家浩
@@ -12,16 +13,24 @@ namespace app\admin\controller;
 
 
 use think\Console;
+use think\Request;
+use think\response\View;
 
 class Index
 {
-	public function index(Console $console)
+	/**
+	 * 控制台
+	 * @param Request $request
+	 * @param Console $console
+	 * @return View
+	 */
+	public function index(Request $request,Console $console)
 	{
 		$system = [
 			// 操作系统
 			'operating_system' => PHP_OS,
 			// 运行环境
-			'runtime_environment' => $_SERVER["SERVER_SOFTWARE"],
+			'runtime_environment' => $request->server("SERVER_SOFTWARE"),
 			// PHP运行方式
 			'operation_mode' => php_sapi_name(),
 			// ThinkPHP版本
@@ -35,11 +44,10 @@ class Index
 			// 北京时间
 			'beijing_time' => gmdate("Y年n月j日 H:i:s", time() + 8 * 3600),
 			// 服务器域名/IP
-			'server_domain_name' => $_SERVER['SERVER_NAME'] . ' [ ' . gethostbyname($_SERVER['SERVER_NAME']) . ' ]',
+			'server_domain_name' => $request->server("SERVER_NAME") . ' [ ' . gethostbyname($request->server("SERVER_NAME")) . ' ]',
 			// 剩余空间
-			'free_space' => round((@disk_free_space(".") / (1024 * 1024)), 2) . 'M'
+			'free_space' => round((disk_free_space(".") / (1024 * 1024)), 2) . 'M'
 		];
-
 
 		return view('index', [
 			'system' => $system

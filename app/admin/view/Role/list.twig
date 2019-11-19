@@ -1,0 +1,73 @@
+{% extends 'layout.twig' %}
+
+{% block main %}
+    <div class="layui-body layui-box">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span>角色列表</span>
+                <div class="layui-right">
+                    <button type="button" class="layui-btn layui-btn-sm"
+                            onclick="$.Modal('{{ url('user/add') }}')">
+                        <i class="layui-icon">&#xe654;</i> 添加角色
+                    </button>
+                </div>
+            </div>
+            <div class="layui-card-body">
+                <table class="layui-table" lay-skin="line">
+                    <colgroup>
+                        <col>
+                        <col>
+                        <col>
+                        <col width="120">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>代码</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in role %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.code }}</td>
+                            <td>{{ item.create_time }}</td>
+                            <td>
+                                <div class="layui-btn-group layui-nav">
+                                    <button type="button" class="layui-btn layui-btn-sm">操作</button>
+                                    <div class="layui-nav-item">
+                                        <a href="javascript:" class="layui-btn layui-btn-sm"></a>
+                                        <dl class="layui-nav-child">
+                                            <dd><a href="">删除</a></dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        function delMenu(id) {
+            layer.confirm('确定要删除?', {
+                icon: 3,
+                closeBtn: 0,
+                btnAlign: 'c',
+                title: false,
+                btn: ['删除', '取消']
+            }, function (index) {
+                layer.close(index);
+            });
+        }
+    </script>
+{% endblock %}

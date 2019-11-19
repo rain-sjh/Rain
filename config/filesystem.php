@@ -9,13 +9,13 @@ return [
     'disks'   => [
         'local'  => [
             'type' => 'local',
-            'root' => public_path('public') . 'uploads',
+            'root' => public_path('public') . 'upload',
         ],
         'public' => [
             // 磁盘类型
             'type'       => 'local',
             // 磁盘路径
-            'root'       => public_path('public') . 'uploads',
+            'root'       => public_path('public') . 'upload',
         ],
         // 更多的磁盘配置信息
     ],

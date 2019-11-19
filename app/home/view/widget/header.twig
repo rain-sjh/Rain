@@ -14,12 +14,12 @@
 			</ul>
 		</div>
 		<div class="layui-col-md2">
-			{% if userInfo %}
+			{% if request().userInfo %}
 				<ul class="layui-nav layui-bg-white">
 					<li class="layui-nav-item">
 						<a href="javascript:">
-							<img lay-src="{{ avatar(userInfo.avatar,userInfo.gender) }}" class="layui-nav-img"
-							     alt=""> {{ userInfo.nickname }}
+							<img lay-src="{{ avatar(request().userInfo.avatar,request().userInfo.gender) }}" class="layui-nav-img"
+							     alt=""> {{ request().userInfo.nickname }}
 						</a>
 						<dl class="layui-nav-child">
 							<dd><a href="javascript:">修改信息</a></dd>

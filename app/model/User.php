@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * 工具: PhpStorm
  * 作者: 孙家浩
@@ -14,8 +15,8 @@ namespace app\model;
 use think\Model;
 
 /**
- * @method static getByUsername($username)
- * @method static getById($id)
+ * @method getById($id)
+ * @method getByUsername($username)
  */
 class User extends Model
 {

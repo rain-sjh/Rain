@@ -12,10 +12,18 @@ namespace app\admin\controller;
 
 use app\model\User as UserModel;
 use app\Request;
-use think\facade\Route;
+use think\db\exception\DbException;
+use think\response\Json;
+use think\response\View;
 
 class User
 {
+	/**
+	 * 用户列表
+	 * @param UserModel $User
+	 * @return View
+	 * @throws DbException
+	 */
 	public function list(UserModel $User)
 	{
 		$list = $User->order('id desc')
@@ -26,7 +34,13 @@ class User
 		]);
 	}
 
-	public function add(Request $request,UserModel $User)
+	/**
+	 * 添加新用户
+	 * @param Request $request
+	 * @param UserModel $User
+	 * @return Json|View
+	 */
+	public function add(Request $request, UserModel $User)
 	{
 		if ($request->isPost()) {
 			$param = $request->post();
@@ -35,7 +49,7 @@ class User
 			}
 			$param['password'] = password_hash($param['password'], PASSWORD_BCRYPT);
 
-			$user = new $User;
+			$user = new $User();
 			$user->save($param);
 
 			if (empty($user->id)) {
@@ -46,6 +60,12 @@ class User
 		return view();
 	}
 
+	/**
+	 * 更改用户状态
+	 * @param $id
+	 * @param $status
+	 * @return Json
+	 */
 	public function status($id, $status)
 	{
 		if (empty($id)) {
@@ -63,7 +83,14 @@ class User
 		return success();
 	}
 
-	public function edit(Request $request,UserModel $User,$id)
+	/**
+	 * 编辑用户信息
+	 * @param Request $request
+	 * @param UserModel $User
+	 * @param $id
+	 * @return Json|View
+	 */
+	public function edit(Request $request, UserModel $User, $id)
 	{
 		$user = $User->field('id, avatar, nickname, username, phone, gender, birthday, summary')
 			->getById($id);
@@ -83,10 +110,4 @@ class User
 		]);
 	}
 
-	public function roleList()
-	{
-		$url = Route::getRuleList();
-		dd($url);
-		return view();
-	}
 }

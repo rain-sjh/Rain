@@ -2,11 +2,23 @@
 <html lang="zh">
 <head>
     <meta charset="utf-8">
-    <title>layout 后台大布局 - Layui</title>
-    <link rel="icon" href="{{ load('rain/image/logo.png') }}">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="keywords" content="{{ config('site').seo_keywords }}">
+    <meta name="description" content="{{ config('site').seo_description }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>{{ title|default(tab_title|default('欢迎使用')) }} ~ {{ config('site').title ~ ' ' ~ config('site').slogan }}</title>
+    <link rel="icon" href="{{ image(config('site').favicon) }}">
     <link rel="stylesheet" href="{{ load('layui/css/layui.css') }}">
     <link rel="stylesheet" href="{{ load('rain/css/app.css') }}">
     {% block css %}{% endblock %}
+    <script src="{{ load('jquery/jquery-3.4.1.js') }}"></script>
+    <script src="{{ load('layui/layui.js') }}"></script>
+    <script src="{{ load('rain/js/app.js') }}"></script>
+    {% block js %}{% endblock %}
+    <script>{{ flash() }}</script>
 </head>
 <body class="layui-layout-body layui-bg-gray">
 <div class="layui-layout">
@@ -23,11 +35,5 @@
         {% endblock %}
     {% endblock %}
 </div>
-<script src="{{ load('jquery/jquery-3.4.1.js') }}"></script>
-<script src="{{ load('layui/layui.js') }}"></script>
-<script src="{{ load('rain/js/app.js') }}"></script>
-{{ renderer.renderHead() }}
-{% block js %}{% endblock %}
-<script>{{ flash() }}</script>
 </body>
 </html>

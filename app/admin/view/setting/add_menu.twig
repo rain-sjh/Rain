@@ -1,0 +1,51 @@
+{% extends 'model.twig' %}
+
+{% block head %}添加菜单{% endblock %}
+
+{% block body %}
+    <div class="layui-form-item">
+        <label for="name" class="layui-form-label">名称</label>
+        <div class="layui-input-inline">
+            <input id="name" type="text" name="name" lay-verify="required" placeholder="请输入名称"
+                   autocomplete="off" class="layui-input" lay-reqText="请输入名称">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="icon" class="layui-form-label">icon</label>
+        <div class="layui-input-inline">
+            <input id="icon" type="text" name="icon" placeholder="请输入图标字符" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="path" class="layui-form-label">路径</label>
+        <div class="layui-input-inline">
+            <input id="path" type="text" name="path" placeholder="请输入路径" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="sort" class="layui-form-label">排序</label>
+        <div class="layui-input-inline">
+            <input id="sort" type="text" name="sort" placeholder="请输入排序(递增)" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="checkbox" name="is_del" title="不可删除" lay-skin="primary">
+            <input type="checkbox" name="is_hide" title="隐藏" lay-skin="primary">
+        </div>
+    </div>
+
+    <input type="hidden" name="parent_id" value="{{ id }}">
+
+{% endblock %}
+
+{% block footer %}
+    <button type="button" lay-submit lay-filter="addMenu" class="layui-btn layui-btn-sm">添加</button>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $.Form('addMenu', '{{ url('addMenu') }}');
+    </script>
+{% endblock %}

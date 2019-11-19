@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * 工具: PhpStorm
  * 作者: 孙家浩
@@ -8,6 +10,8 @@
  * 侵权必究
  */
 
+use app\model\Menu;
+use think\facade\Config;
 use Twig\Extension\AbstractExtension;
 use Twig\NodeVisitor\NodeVisitorInterface;
 use Twig\TokenParser\TokenParserInterface;
@@ -18,34 +22,40 @@ use Twig\TwigTest;
 class TwigExpand extends AbstractExtension
 {
 	/**
-	 * 过滤器 拓展.
+	 * 返回要添加到现有列表的过滤器列表.
+	 *
 	 * @return TwigFilter[]
 	 */
 	public function getFilters()
 	{
 		return [
-			new TwigFilter('getCity', [$this, 'getCity'])
+			new TwigFilter('getCity', [$this, 'city'])
 		];
 	}
 
 	/**
-	 * 函数 拓展.
+	 * 返回要添加到现有列表的函数列表.
+	 *
 	 * @return TwigFunction[]
 	 */
 	public function getFunctions()
 	{
 		return [
 			new TwigFunction('load', [$this, 'load']),
-			new TwigFunction('is_controller', [$this, 'is_controller']),
-			new TwigFunction('is_action', [$this, 'is_action']),
+			new TwigFunction('action', [$this, 'action'], ['is_safe' => ['html', 'javascript']]),
+			new TwigFunction('image', [$this, 'image']),
 			new TwigFunction('avatar', [$this, 'avatar']),
-			new TwigFunction('flash', [$this, 'getFlash'], ['is_safe' => ['html','javascript']]),
+			new TwigFunction('flash', [$this, 'flash'], ['is_safe' => ['html', 'javascript']]),
+			new TwigFunction('config', [$this, 'config']),
+			new TwigFunction('menus', [$this, 'menus']),
+			new TwigFunction('user', [$this, 'user']),
 		];
 	}
 
 	/**
-	 * Token的解析器 拓展.
-	 * @return array|TokenParserInterface[]
+	 * 返回令牌解析器实例以添加到现有列表.
+	 *
+	 * @return TokenParserInterface[]
 	 */
 	public function getTokenParsers()
 	{
@@ -53,8 +63,9 @@ class TwigExpand extends AbstractExtension
 	}
 
 	/**
-	 * 节点访问器 拓展.
-	 * @return array|NodeVisitorInterface[]
+	 * 返回要添加到现有列表的节点访问者实例.
+	 *
+	 * @return NodeVisitorInterface[]
 	 */
 	public function getNodeVisitors()
 	{
@@ -62,7 +73,7 @@ class TwigExpand extends AbstractExtension
 	}
 
 	/**
-	 * 测试 拓展.
+	 * 返回要添加到现有列表的测试列表.
 	 *
 	 * @return TwigTest[]
 	 */
@@ -72,7 +83,8 @@ class TwigExpand extends AbstractExtension
 	}
 
 	/**
-	 * 运算符 拓展.
+	 * 返回要添加到现有列表的运算符列表.
+	 *
 	 * @return array<array> First array of unary operators, second array of binary operators
 	 */
 	public function getOperators()
@@ -93,32 +105,47 @@ class TwigExpand extends AbstractExtension
 		return $path;
 	}
 
+
 	/**
-	 * 是否是当前控制器
-	 * @param string $name
+	 * 是否活跃
+	 * @param string $id
 	 * @param string $select
 	 * @return string
 	 */
-	public function is_controller($name = '', $select = '')
+	public function action($id = '', $select = '')
 	{
-		if (strtolower(Request()->controller()) == strtolower($name)) {
+		$Menu = new Menu();
+		$app = app('http')->getName();
+		$default_app = Config::get('app.default_app');
+		if ($default_app != $app) $default_path = '/' . $app; else $default_path = '/';
+		$path = request()->pathinfo() ? request()->pathinfo() : $default_path;
+		$menu = $Menu->getByPath($path);
+		if (!empty($menu) && in_array($id, [$menu->id, $menu->parent_id])) {
 			return $select;
+		} else {
+			$menu = $Menu->getById($menu->parent_id);
+			if (!empty($menu) && in_array($id, [$menu->id, $menu->parent_id])) {
+				return $select;
+			}
 		}
 		return '';
 	}
 
 	/**
-	 * 是否是当前方法
-	 * @param string $name
-	 * @param string $select
+	 * 图片处理
+	 * @param string $path
+	 * @param string $default
+	 * @param string $base
 	 * @return string
 	 */
-	public function is_action($name = '', $select = '')
+	public function image($path = '', $default = '/static/rain/image/default.png', $base = '')
 	{
-		if (strtolower(Request()->action()) == strtolower($name)) {
-			return $select;
+		if (empty($path)) {
+			$path = $default;
+		} else {
+			$path = $base . $path;
 		}
-		return '';
+		return $path;
 	}
 
 	/**
@@ -130,16 +157,14 @@ class TwigExpand extends AbstractExtension
 	public function avatar($path = '', $gender = 0)
 	{
 		if (strtolower(substr($path, 0, 4)) != 'http') {
-			if (file_exists(public_path('/public/uploads/') . $path) && !empty($path)) {
-				$path = '/uploads/' . $path;
-			} else {
-				if (empty($gender)) {
-					$path = '/static/rain/image/Unknown.jpg';
-				} elseif ($gender == 1) {
-					$path = '/static/rain/image/male.png';
-				} elseif ($gender == 2) {
-					$path = '/static/rain/image/female.png';
-				}
+			if (file_exists(public_path('/public/upload/') . $path) && !empty($path)) {
+				$path = '/upload/' . $path;
+			} elseif (empty($gender)) {
+				$path = '/static/rain/image/unknown.jpg';
+			} elseif ($gender == 1) {
+				$path = '/static/rain/image/male.png';
+			} elseif ($gender == 2) {
+				$path = '/static/rain/image/female.png';
 			}
 		}
 		return $path;
@@ -150,7 +175,7 @@ class TwigExpand extends AbstractExtension
 	 * @param string $ip
 	 * @return mixed|string
 	 */
-	public function getCity($ip = '')
+	public function city($ip = '')
 	{
 		$res = '未知';
 		if (!empty($ip)) {
@@ -168,18 +193,49 @@ class TwigExpand extends AbstractExtension
 	 * 调起闪存信息
 	 * @return bool|string
 	 */
-	public function getFlash()
+	public function flash()
 	{
 		$tips = session('tips');
 		if ($tips) {
 			$tips = json_decode($tips, true);
-			return "$(function () {
-			        layui.use('layer', function () {
-			            let layer = layui.layer;
-			            $.msg('{$tips['msg']}', '{$tips['icon']}');
-			        });
-				});";
+			return "$.Flash('{$tips['msg']}', '{$tips['icon']}');";
 		}
 		return false;
+	}
+
+	/**
+	 * 获取系统配置
+	 * @param $key
+	 * @return mixed
+	 */
+	public function config($key)
+	{
+		$config = request()->configInfo;
+
+		return isset($config[$key]) ? $config[$key] : null;
+	}
+
+	/**
+	 * 获取菜单配置
+	 * @param $name
+	 * @return string |null
+	 */
+	public function menus($name)
+	{
+		$menus = request()->menuInfo;
+
+		return isset($menus[$name]) ? $menus[$name] : null;
+	}
+
+	/**
+	 * 获取登录用户信息
+	 * @param $name
+	 * @return string |null
+	 */
+	public function user($name)
+	{
+		$user = request()->userInfo;
+
+		return isset($user[$name]) ? $user[$name] : null;
 	}
 }

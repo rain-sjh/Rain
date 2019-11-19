@@ -1,0 +1,71 @@
+{% extends 'layout.twig' %}
+
+{% block side %}
+    {% include 'widget/side.twig' %}
+{% endblock %}
+
+{% set tab_title = '菜单管理' %}
+
+{% block main %}
+    <div class="layui-tab-content layui-menu">
+        {{ _self.menuList(0 ,menus) }}
+        {% macro menuList(index, menus) %}
+            <div class="layui-collapse" lay-accordion>
+                {% for menu in menus[index] %}
+                    <div class="layui-row layui-colla-item {{ menus[menu.id]?'':'layui-icon-hide' }}">
+                        <div class="layui-colla-title layui-col-md10">
+                            <span><i class="layui-icon">{{ menu.icon|raw }}</i> {{ menu.name }}</span>
+                        </div>
+                        <div class="layui-btn-group layui-col-md2">
+                            <div class="layui-right" style="line-height:42px;padding-right: 10px;">
+                                <button title="添加 {{ menu.name }} 的子菜单" type="button" class="layui-btn layui-btn-xs"
+                                        onclick="$.Modal('{{ url('addMenu',{'id':menu.id}) }}')">
+                                    <i class="layui-icon">&#xe654;</i>
+                                </button>
+                                <button title="修改 {{ menu.name }} 菜单" type="button"
+                                        class="layui-btn layui-btn-xs layui-btn-normal"
+                                        onclick="$.Modal('{{ url('editMenu',{'id':menu.id}) }}')">
+                                    <i class="layui-icon">&#xe642;</i>
+                                </button>
+                                <button type="button"
+                                        class="layui-btn layui-btn-xs {{ menu.is_del?'layui-btn-disabled':'layui-btn-danger' }}"
+                                        {% if not menu.is_del %} onclick="delMenu('{{ menu.id }}')"{% endif %}>
+                                    <i class="layui-icon">&#xe640;</i>
+                                </button>
+                            </div>
+                        </div>
+                        {% if menus[menu.id] %}
+                            <div class="layui-colla-content layui-col-md12">
+                                {{ _self.menuList(menu.id,menus) }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endmacro %}
+        <div class="" style="padding: 10px 0 0 0">
+            <button type="button" class="layui-btn layui-btn-sm" onclick="$.Modal('{{ url('addMenu') }}')">
+                <i class="layui-icon">&#xe654;</i> 添加
+            </button>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script>
+        function delMenu(id) {
+            layer.confirm('确定要删除?', {
+                icon: 3,
+                closeBtn: 0,
+                btnAlign: 'c',
+                title: false,
+                btn: ['删除', '取消']
+            }, function (index) {
+                $.Post('{{ url('delMenu') }}',{id:id});
+                layer.close(index);
+            });
+        }
+    </script>
+{% endblock %}
