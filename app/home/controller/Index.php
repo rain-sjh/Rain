@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * 工具: PhpStorm
  * 作者: 孙家浩
@@ -12,9 +13,14 @@ namespace app\home\controller;
 
 
 use app\common\controller\Base;
+use think\response\View;
 
 class Index extends Base
 {
+	/**
+	 * 前台首页
+	 * @return View
+	 */
 	public function index()
 	{
 		return view('index');

@@ -6,8 +6,8 @@
             <div class="layui-card-header">
                 <span>角色列表</span>
                 <div class="layui-right">
-                    <button type="button" class="layui-btn layui-btn-sm"
-                            onclick="$.Modal('{{ url('user/add') }}')">
+                    <button type="button" class="layui-btn layui-btn-normal layui-btn-sm"
+                            onclick="$.Modal('{{ url('role/add') }}')">
                         <i class="layui-icon">&#xe654;</i> 添加角色
                     </button>
                 </div>
@@ -36,11 +36,11 @@
                             <td>{{ item.create_time }}</td>
                             <td>
                                 <div class="layui-btn-group layui-nav">
-                                    <button type="button" class="layui-btn layui-btn-sm">操作</button>
+                                    <button type="button" class="layui-btn layui-btn-normal layui-btn-sm">操作</button>
                                     <div class="layui-nav-item">
-                                        <a href="javascript:" class="layui-btn layui-btn-sm"></a>
+                                        <a href="javascript:" class="layui-btn layui-btn-normal layui-btn-sm"></a>
                                         <dl class="layui-nav-child">
-                                            <dd><a href="">删除</a></dd>
+                                            <dd><a href="#" onclick="delMenu('{{ item.id }}')">删除</a></dd>
                                         </dl>
                                     </div>
                                 </div>
@@ -60,12 +60,15 @@
     <script>
         function delMenu(id) {
             layer.confirm('确定要删除?', {
-                icon: 3,
+                icon: 0,
                 closeBtn: 0,
                 btnAlign: 'c',
                 title: false,
                 btn: ['删除', '取消']
             }, function (index) {
+                $.Post('{{ url('role/del') }}',{id:id},function (res) {
+                    $.Url();
+                });
                 layer.close(index);
             });
         }

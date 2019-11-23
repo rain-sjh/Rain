@@ -37,7 +37,7 @@
                                     <input class="layui-hide" type="checkbox" id="remember" lay-ignore>
                                     <span class="option">
                                         <span class="option-item">
-                                            <span class="opspan"></span>
+                                            <span class="opSpan"></span>
                                         </span>
                                     </span>
                                     <span class="check-text">记住我</span>
@@ -62,6 +62,8 @@
 {% block js %}
     <script src="{{ load('raindrop/config.js') }}"></script>
     <script>
-        $.Form('login');
+        $.Form('login','', function (res) {
+            $.Url();
+        });
     </script>
 {% endblock %}

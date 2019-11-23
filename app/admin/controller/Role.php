@@ -13,15 +13,18 @@ namespace app\admin\controller;
 
 
 use app\model\Role as RoleModel;
+use Exception;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
+use think\Request;
+use think\response\Json;
 use think\response\View;
 
 class Role
 {
-
 	/**
+	 * 角色列表
 	 * @param RoleModel $Role
 	 * @return View
 	 * @throws DataNotFoundException
@@ -32,9 +35,42 @@ class Role
 	{
 		$role = $Role->select();
 
-		return view('',[
+		return view('list',[
 			'role' => $role
 		]);
 
+	}
+
+	public function add(Request $request,RoleModel $Role)
+	{
+		if ($request->isPost()) {
+			$param = $request->post();
+//			$Role->getBy
+			dd($param);
+		}
+		return view('add');
+	}
+
+	/**
+	 * 删除角色
+	 * @param Request $request
+	 * @param RoleModel $Role
+	 * @param $id
+	 * @return Json
+	 * @throws DataNotFoundException
+	 * @throws DbException
+	 * @throws ModelNotFoundException
+	 * @throws Exception
+	 */
+	public function del(Request $request,RoleModel $Role, $id)
+	{
+		if ($request->isPost()) {
+			$role = $Role->find($id);
+			$role->delete();
+
+			return success('','删除成功!');
+		}
+
+		return error(401);
 	}
 }
