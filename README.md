@@ -19,7 +19,9 @@ ThinkPHP 6.0
 * 统一和精简大量用法
 
 ## 管理员
-账号: admin 密码: 10086
+账号: admin
+
+密码: 10086
 ## 展示
 登录
 ![Image text](https://raw.githubusercontent.com/625250353/Rain/master/public/static/rain/image/登录.png)
