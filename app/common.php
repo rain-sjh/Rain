@@ -1,6 +1,15 @@
 <?php
-// 应用公共文件
+declare(strict_types=1);
 
+// 应用公共文件
+use think\response\Json;
+
+/**
+ * 接口成功返回
+ * @param array $data
+ * @param string $msg
+ * @return Json
+ */
 function success($data = [], $msg = '请求成功!')
 {
 	return json([
@@ -10,6 +19,12 @@ function success($data = [], $msg = '请求成功!')
 	]);
 }
 
+/**
+ * 接口错误返回
+ * @param $code
+ * @param string $msg
+ * @return Json
+ */
 function error($code, $msg = '')
 {
 	$list = [
@@ -22,48 +37,56 @@ function error($code, $msg = '')
 		407 => '登录过期,请重新登录!',
 		500 => '服务器不可用!'
 	];
+
+	if (empty($msg)) {
+		$msg = empty($list[$code]) ? '未知错误!' : $list[$code];
+	}
+
 	return json([
 		'code' => $code,
-		'msg' => $msg ? $msg : (empty($list[$code]) ? '未知错误!' : $list[$code])
+		'msg' => $msg
 	]);
 }
 
+/**
+ * token 加密
+ * @param $str
+ * @return bool|false|string
+ */
 function token_encrypt($str)
 {
-	$token = XXTEA::encrypt($str, getIP());
-	$token = base64_encode($token);
-	return $token;
+	return base64_encode(XXTEA::encrypt($str, get_ip()));
 }
 
+/**
+ * token 解密
+ * @param $str
+ * @return bool|false|string
+ */
 function token_decrypt($str)
 {
-	$str = base64_decode($str);
-	$token = XXTEA::decrypt($str, getIP());
-	return $token;
+	return XXTEA::decrypt(base64_decode($str), get_ip());
 }
 
 /**
  * 获取用户真实 IP
  */
-function getIP()
+function get_ip()
 {
-	static $ip;
 	if (isset($_SERVER)) {
-		if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
-			$ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
-		} else if (isset($_SERVER["HTTP_CLIENT_IP"])) {
-			$ip = $_SERVER["HTTP_CLIENT_IP"];
+		if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		} elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
 		} else {
-			$ip = $_SERVER["REMOTE_ADDR"];
+			$ip = $_SERVER['REMOTE_ADDR'];
 		}
+	} elseif (getenv('HTTP_X_FORWARDED_FOR')) {
+		$ip = getenv('HTTP_X_FORWARDED_FOR');
+	} elseif (getenv('HTTP_CLIENT_IP')) {
+		$ip = getenv('HTTP_CLIENT_IP');
 	} else {
-		if (getenv("HTTP_X_FORWARDED_FOR")) {
-			$ip = getenv("HTTP_X_FORWARDED_FOR");
-		} else if (getenv("HTTP_CLIENT_IP")) {
-			$ip = getenv("HTTP_CLIENT_IP");
-		} else {
-			$ip = getenv("REMOTE_ADDR");
-		}
+		$ip = getenv('REMOTE_ADDR');
 	}
 	return $ip;
 }
@@ -75,20 +98,23 @@ function getIP()
  * @param string $ip
  * @return array|bool|mixed
  */
-function getCity($ip = '')
+function get_city($ip = '')
 {
-	if ($ip == '') {
-		$url = "http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json";
-		$ip = json_decode(file_get_contents($url), true);
-		$data = $ip;
-	} else {
-		$url = "http://ip.taobao.com/service/getIpInfo.php?ip=" . $ip;
-		$ip = json_decode(file_get_contents($url));
-		if ((string)$ip->code == '1') {
-			return false;
+	$data = cache($ip);
+	if (empty($data)) {
+		if ($ip === '') {
+			$url = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json';
+			$res = json_decode(file_get_contents($url), true);
+			$data = $res;
+		} else {
+			$url = 'http://ip.taobao.com/service/getIpInfo.php?ip=' . $ip;
+			$res = json_decode(file_get_contents($url), true);
+			if ((string)$res['code'] === '1') {
+				return false;
+			}
+			$data = $res['data'];
 		}
-		$data = (array)$ip->data;
+		cache($ip, $data);
 	}
-
 	return $data;
 }

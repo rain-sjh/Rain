@@ -25,7 +25,7 @@
 							<dd><a href="javascript:">修改信息</a></dd>
 							<dd><a href="javascript:">安全管理</a></dd>
 							<dd><a href="{{ url('/admin') }}" target="_blank">后台管理</a></dd>
-							<dd><a href="javascript:" onclick="$.Get('{{ url('/logout') }}')">退出</a></dd>
+							<dd><a href="javascript:" onclick="$.Get('{{ url('/logout') }}','',function() {$.Url()})">退出</a></dd>
 						</dl>
 					</li>
 				</ul>

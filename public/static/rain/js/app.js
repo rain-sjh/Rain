@@ -48,7 +48,8 @@ $.Get = function (url, param = {}, $res) {
         $.get(url, param, function (res) {
             layer.close(getLoad);
             if (res.code === 200) {
-                return $.msg(res.msg);
+                $.msg(res.msg);
+                return $res(res);
             }
             return $.msg(res.msg, 2);
         })
@@ -63,7 +64,7 @@ $.Post = function (url, param = [], $res) {
             layer.close(postLoad);
             if (res.code === 200) {
                 $.msg(res.msg);
-                return $res(res.code);
+                return $res(res);
             }
             return $.msg(res.msg, 2);
         })

@@ -29,7 +29,7 @@ class TwigExpand extends AbstractExtension
 	public function getFilters()
 	{
 		return [
-			new TwigFilter('getCity', [$this, 'city'])
+			new TwigFilter('city', [$this, 'city'])
 		];
 	}
 
@@ -57,40 +57,40 @@ class TwigExpand extends AbstractExtension
 	 *
 	 * @return TokenParserInterface[]
 	 */
-	public function getTokenParsers()
-	{
-		return [];
-	}
+//	public function getTokenParsers()
+//	{
+//		return [];
+//	}
 
 	/**
 	 * 返回要添加到现有列表的节点访问者实例.
 	 *
 	 * @return NodeVisitorInterface[]
 	 */
-	public function getNodeVisitors()
-	{
-		return [];
-	}
+//	public function getNodeVisitors()
+//	{
+//		return [];
+//	}
 
 	/**
 	 * 返回要添加到现有列表的测试列表.
 	 *
 	 * @return TwigTest[]
 	 */
-	public function getTests()
-	{
-		return [];
-	}
+//	public function getTests()
+//	{
+//		return [];
+//	}
 
 	/**
 	 * 返回要添加到现有列表的运算符列表.
 	 *
 	 * @return array<array> First array of unary operators, second array of binary operators
 	 */
-	public function getOperators()
-	{
-		return [];
-	}
+//	public function getOperators()
+//	{
+//		return [];
+//	}
 
 	/**
 	 * 资源加载,基于static目录
@@ -117,16 +117,20 @@ class TwigExpand extends AbstractExtension
 		$Menu = new Menu();
 		$app = app('http')->getName();
 		$default_app = Config::get('app.default_app');
-		if ($default_app != $app) $default_path = '/' . $app; else $default_path = '/';
-		$path = request()->pathinfo() ? request()->pathinfo() : $default_path;
-		$menu = $Menu->getByPath($path);
-		if (!empty($menu) && in_array($id, [$menu->id, $menu->parent_id])) {
-			return $select;
+		if ($default_app !== $app) {
+			$default_path = '/' . $app;
 		} else {
-			$menu = $Menu->getById($menu->parent_id);
-			if (!empty($menu) && in_array($id, [$menu->id, $menu->parent_id])) {
-				return $select;
-			}
+			$default_path = '/';
+		}
+		$path = request()->pathinfo() ?: $default_path;
+		$menu = $Menu->getByPath($path);
+		if (!empty($menu) && in_array($id, [$menu->id, $menu->parent_id], false)) {
+			return $select;
+		}
+
+		$menu = $Menu->getById($menu->parent_id);
+		if (!empty($menu) && in_array($id, [$menu->id, $menu->parent_id], false)) {
+			return $select;
 		}
 		return '';
 	}
@@ -156,14 +160,14 @@ class TwigExpand extends AbstractExtension
 	 */
 	public function avatar($path = '', $gender = 0)
 	{
-		if (strtolower(substr($path, 0, 4)) != 'http') {
-			if (file_exists(public_path('/public/upload/') . $path) && !empty($path)) {
+		if (stripos($path, 'http') !== 0) {
+			if (!empty($path) && file_exists(public_path('/public/upload/') . $path)) {
 				$path = '/upload/' . $path;
 			} elseif (empty($gender)) {
 				$path = '/static/rain/image/unknown.jpg';
-			} elseif ($gender == 1) {
+			} elseif ($gender === 1) {
 				$path = '/static/rain/image/male.png';
-			} elseif ($gender == 2) {
+			} elseif ($gender === 2) {
 				$path = '/static/rain/image/female.png';
 			}
 		}
@@ -179,8 +183,8 @@ class TwigExpand extends AbstractExtension
 	{
 		$res = '未知';
 		if (!empty($ip)) {
-			$data = getCity($ip);
-			if ($data['isp_id'] == 'local') {
+			$data = get_city($ip);
+			if ($data['isp_id'] === 'local') {
 				$res = $data['isp'];
 			} else {
 				$res = $data['country'] . $data['area'] . $data['region'] . $data['city'] . $data['county'] . $data['isp'];
