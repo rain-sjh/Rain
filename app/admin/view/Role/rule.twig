@@ -1,0 +1,67 @@
+{% extends 'model.twig' %}
+
+{% block head %}访问权限{% endblock %}
+
+{% block body %}
+
+    <div id="menuTree" style="width: 500px; height: 600px">
+
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    <button type="button" lay-submit lay-filter="addRole" class="layui-btn layui-btn-sm">保存</button>
+{% endblock %}
+
+{% block js %}
+    <script>
+        layui.use('tree', function () {
+            var tree = layui.tree;
+
+            //渲染
+            var inst1 = tree.render({
+                elem: '#menuTree',
+                showCheckbox: true,
+                // showLine: false,
+                data: [{
+                    title: '用户',
+                    spread: true,
+                    children: [{
+                        title: '用户管理',
+                        children: [{
+                            title: '添加用户',
+                        }, {
+                            title: '编辑用户',
+                        }, {
+                            title: '删除用户',
+                        }]
+                    }, {
+                        title: '角色管理',
+                        children: [{
+                            title: '添加角色',
+                        }, {
+                            title: '编辑角色',
+                        }, {
+                            title: '删除角色',
+                        }
+                        ]
+                    }]
+                }, {
+                    title: '系统',
+                    spread: true,
+                    children: [{
+                        title: '站点管理',
+                        children: [{
+                            title: '网站信息'
+                        }, {
+                            title: '菜单管理'
+                        }]
+                    }, {
+                        title: '系统优化'
+                    }]
+                }]
+            });
+        });
+    </script>
+{% endblock %}

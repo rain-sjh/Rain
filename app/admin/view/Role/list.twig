@@ -36,11 +36,14 @@
                             <td>{{ item.create_time }}</td>
                             <td>
                                 <div class="layui-btn-group layui-nav">
-                                    <button type="button" class="layui-btn layui-btn-normal layui-btn-sm">操作</button>
+                                    <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" onclick="$.Modal('{{ url('role/edit',{id:item.id}) }}')">编辑</button>
                                     <div class="layui-nav-item">
                                         <a href="javascript:" class="layui-btn layui-btn-normal layui-btn-sm"></a>
                                         <dl class="layui-nav-child">
-                                            <dd><a href="#" onclick="delMenu('{{ item.id }}')">删除</a></dd>
+                                            <dd><a href="#" onclick="$.Modal('{{ url('role/rule',{id:item.id}) }}')">权限</a></dd>
+                                            <dd>
+                                                <a href="#" onclick="$.Del('{{ url('role/del',{id:item.id}) }}')">删除</a>
+                                            </dd>
                                         </dl>
                                     </div>
                                 </div>
@@ -57,20 +60,5 @@
 {% endblock %}
 
 {% block js %}
-    <script>
-        function delMenu(id) {
-            layer.confirm('确定要删除?', {
-                icon: 0,
-                closeBtn: 0,
-                btnAlign: 'c',
-                title: false,
-                btn: ['删除', '取消']
-            }, function (index) {
-                $.Post('{{ url('role/del') }}',{id:id},function (res) {
-                    $.Url();
-                });
-                layer.close(index);
-            });
-        }
-    </script>
+
 {% endblock %}

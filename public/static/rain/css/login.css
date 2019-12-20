@@ -1,0 +1,207 @@
+@charset "UTF-8";
+
+.layui-img-bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: -100;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+.tpl-user-modal-wrapper{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    transition: opacity 300ms ease-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.tpl-modal{
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: 750px;
+    max-height: calc(100vh - 24px * 2);
+    margin: auto;
+    outline: 0;
+    box-shadow: 0 5px 20px rgba(26, 26, 26, 0.1);
+    transition: .6s all;
+    overflow: hidden;
+}
+.logo{
+    position: absolute;
+    left: 8px;
+    top: 8px;
+}
+.logo img{
+    width: 50px;
+    border-radius: 50%;
+}
+.tpl-modal .tpl-modal-item{
+    background-color: #fff;
+    border-radius: 15px;
+    overflow: auto;
+    padding: 15px;
+    user-select: none;
+    min-height: 300px;
+}
+.tpl-modal .tpl-modal-item .left-form-item{
+    width: 50%;
+    float: left;
+    box-sizing: border-box;
+    padding: 15px;
+    margin: 2% 0;
+}
+.tpl-modal .tpl-modal-item .left-form-item .sub-title{
+    font-weight: bold;
+    margin: 25px 0;
+    text-align: center;
+}
+.tpl-modal .tpl-modal-item .left-form-item .group{
+    width: 92%;
+    margin: 15px auto;
+    color: #1E9FFF;
+    text-align: center;
+    position: relative;
+}
+.tpl-modal .tpl-modal-item .left-form-item .group:before,
+.tpl-modal .tpl-modal-item .left-form-item .group:after{
+    content: ' ';
+    display: block;
+    clear: both;
+}
+.tpl-modal .tpl-modal-item .left-form-item .group label{
+    display: inline-block;
+    line-height: 32px;
+    padding: 0 6px;
+    margin-left: 15px;
+}
+.tpl-modal .tpl-modal-item .left-form-item .group label i{
+    line-height: 32px;
+}
+.tpl-modal .tpl-modal-item .left-form-item .group .inp{
+    line-height: 32px;
+    border: 0;
+    border-bottom: 1px solid #e8e8e8;
+    outline: none;
+    box-sizing: border-box;
+    padding-left: 12px;
+    width: 80%;
+    color: #555555;
+}
+.tpl-modal .tpl-modal-item .left-form-item .group .inp::-webkit-input-placeholder{
+    color: #a1a1a1;
+}
+.tpl-modal .tpl-modal-item .left-form-item .group .submit{
+    display: block;
+    padding: 8px 3.5rem;
+    cursor: pointer;
+    border: 0;
+    outline: none;
+    color: #ffffff;
+    background-color: #1E9FFF;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin: 0 auto;
+}
+.code-img{
+    width: 100px;
+    position: absolute;
+    right: 7px;
+    top: 0;
+    /*border: 1px solid #e8e8e8;*/
+    border-radius: 5px;
+    opacity: .8;
+    cursor: pointer;
+}
+.right-bg-item{
+    float: left;
+    padding: 15px;
+    box-sizing: border-box;
+    width: 50%;
+}
+.right-bg-item img{
+    width: 100%;
+}
+.sm-font{
+    font-size: 12px;
+    text-align: left !important;
+}
+.sm-font input[type="checkbox"]{
+    display: none;
+}
+.sm-font label{
+    cursor: pointer;
+}
+.sm-font .option{
+    width: 12px;
+    height: 12px;
+    transition: .4s all;
+    display: inline-block;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    position: absolute;
+    top: 9px;
+    left: 28px;
+}
+.sm-font .option .option-item{
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.sm-font .option .option-item .opSpan{
+    width: 8px;
+    height: 8px;
+    display: block;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    transition: .4s all;
+    background-color: transparent;
+}
+.check-text{
+    padding-left: 45px;
+    color: #868686
+;
+}
+.sm-font .opval{
+    padding: 0 28px;
+    display: inline-block;
+}
+input[type="checkbox"]:checked+.option{
+    border: 1px solid #1E9FFF;
+}
+input[type="checkbox"]:checked+.option .option-item .opSpan{
+    background-color: #1E9FFF;
+}
+.send-mail-code{
+    padding: 5px 8px;
+    background-color: #1E9FFF;
+    color: #fff;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: 12px;
+    cursor: pointer;
+}

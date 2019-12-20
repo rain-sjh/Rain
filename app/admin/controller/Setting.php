@@ -57,15 +57,15 @@ class Setting
 
 	/**
 	 * 菜单列表
-	 * @param Menu $menu
+	 * @param Menu $Menu
 	 * @return View
 	 * @throws DataNotFoundException
 	 * @throws DbException
 	 * @throws ModelNotFoundException
 	 */
-	public function menu(Menu $menu)
+	public function menu(Menu $Menu)
 	{
-		$menus = $menu->order('sort create_time')
+		$menus = $Menu->order('sort create_time')
 			->select();
 
 		$list = [];

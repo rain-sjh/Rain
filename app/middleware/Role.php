@@ -104,15 +104,15 @@ class Role
 		// 当前控制器
 		$path = request()->pathinfo();
 		// 白名单
-		$allow = isset($this->allow[$app]) ? $this->allow[$app] : [];
+		$allow = $this->allow[$app] ?? [];
 		// 不在白名单,验证登录身份
-		if (!in_array($path, $allow)) {
-			if (empty($this->user)) {
-				// 设置session标记完成
-				session('complete', true);
-				if (request()->isAjax()) return error(407);
-				return redirect('/login')->remember()->send();
+		if (empty($this->user) && !in_array($path, $allow, true)) {
+			// 设置session标记完成
+			session('complete', true);
+			if (request()->isAjax()) {
+				return error(407);
 			}
+			return redirect('/login')->remember()->send();
 		}
 
 		$Menu = new Menu();
@@ -121,25 +121,33 @@ class Role
 			->select()->toArray();
 
 		foreach ($menus as $item) {
-			if (empty($item['parent_id']) && empty($item['path'])) {
-				$tabs = $Menu->order('sort create_time')
-					->getByParentId($item['id']);
-				if (!empty($tabs)) {
-					if (empty($tabs->path)) {
-						$tabs = $Menu->order('sort create_time')
-							->getByParentId($tabs->id);
+			if (empty($item['parent_id'])) {
+				if (empty($item['path'])) {
+					$tabs = $Menu->order('sort create_time')->getByParentId($item['id']);
+
+					if (!empty($tabs)) {
+						if (empty($tabs->path)) {
+							$tabs = $Menu->order('sort create_time')
+								->getByParentId($tabs->id);
+						}
+						$item['path'] = $tabs->path ?? '';
 					}
-					$item['path'] = isset($tabs->path)?$tabs->path:'';
+
 				}
-				$this->menus['menu'][] = $item;
-			} elseif (empty($item['parent_id'])) {
 				$this->menus['menu'][] = $item;
 			}
 		}
 
 		$default_app = \think\facade\Config::get('app.default_app');
-		if ($default_app != $app) $default_path = '/' . $app; else $default_path = '/';
-		$path = request()->pathinfo() ? request()->pathinfo() : $default_path;
+
+		if ($default_app !== $app) {
+			$default_path = '/' . $app;
+		} else {
+			$default_path = '/';
+		}
+
+		$path = request()->pathinfo() ?: $default_path;
+
 		$menu = $Menu->getByPath($path);
 		if (!empty($menu->parent_id)) {
 			$parent = $Menu->getById($menu['parent_id']);
@@ -149,10 +157,10 @@ class Role
 				$tab = $parent['parent_id'];
 			}
 			foreach ($menus as $item) {
-				if ($item['parent_id'] == $tab) {
+				if ($item['parent_id'] === $tab) {
 					$this->menus['tabs'][$item['id']] = $item;
 					foreach ($menus as $i) {
-						if ($i['parent_id'] == $item['id']) {
+						if ($i['parent_id'] === $item['id']) {
 							$this->menus['tabs'][$item['id']]['data'][] = $i;
 						}
 					}
@@ -176,8 +184,9 @@ class Role
 		$config = $config->column('content', 'key');
 
 		foreach ($config as &$item) {
-			$item = json_decode($item);
+			$item = json_decode($item, true);
 		}
+		unset($item);
 
 		$this->config = $config;
 		return $request->configInfo = $this->config;

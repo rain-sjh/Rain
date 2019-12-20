@@ -1,0 +1,131 @@
+/*前台*/
+.layui-bg-white {
+    background-color: #FFFFFF !important;
+}
+
+.layui-bg-white .layui-nav-item a, .layui-bg-white .layui-this a, .layui-bg-white .layui-this a .layui-nav-more {
+    color: #A2A2A2;
+}
+
+.layui-bg-white > .layui-nav-item a:hover, .layui-bg-white > .layui-this a:hover {
+    color: #0C0C0C;
+}
+
+.layui-bg-white .layui-nav-more {
+    border-top-color: #A2A2A2;
+    border-bottom-color: transparent;
+}
+
+.layui-bg-white .layui-nav-mored {
+    border-bottom-color: #A2A2A2;
+    border-top-color: transparent;
+}
+
+.layui-nav .layui-this:after, .layui-nav-bar, .layui-nav-tree .layui-nav-itemed:after {
+    background-color: #01AAED !important;
+}
+
+.layui-nav-tree .layui-this , .layui-nav-tree .layui-this>a {
+    background-color: #01AAED !important;
+}
+
+.layui-nav .layui-nav-child dd.layui-this a, .layui-nav-child dd.layui-this {
+    background-color: #01AAED !important;
+}
+
+.hide {
+    display: none !important;
+}
+
+.layui-btn-group.layui-nav {
+    padding: unset;
+    background-color: unset;
+}
+
+.layui-btn-group.layui-nav .layui-nav-item {
+    line-height: 30px;
+    padding: 0;
+}
+
+.layui-btn-group.layui-nav .layui-btn {
+    border-radius: 0;
+}
+
+.layui-btn-group.layui-nav .layui-nav-item a {
+    padding: 0 8px;
+    margin: 0 1px;
+}
+
+.layui-btn-group.layui-nav .layui-nav-child {
+    top: 35px;
+    min-width: 80px;
+    text-align: center;
+}
+
+.layui-menu .layui-collapse {
+    border: none;
+    background-color: #F2F2F2;
+}
+
+.layui-menu .layui-colla-content {
+    padding: 0 0 0 30px;
+}
+
+.layui-menu .layui-colla-item.layui-icon-hide .layui-colla-icon {
+    display: none;
+}
+
+.layui-site-title {
+    margin: 30px 0 20px;
+}
+
+.layui-site-title fieldset {
+    border: none;
+    padding: 0;
+    border-top: 1px solid #eee;
+}
+
+.layui-site-title fieldset legend {
+    margin-left: 20px;
+    padding: 0 10px;
+    font-size: 22px;
+    font-weight: 300;
+}
+
+.layui-upload-list {
+    overflow: hidden;
+}
+
+.layui-upload-img {
+    min-height: 30px;
+    max-height: 100px;
+    padding: 0 5px 5px 0;
+}
+
+.layui-center {
+    text-align: center;
+}
+
+.layui-right {
+    float: right;
+}
+
+.layui-left {
+    float: left;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

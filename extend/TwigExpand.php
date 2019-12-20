@@ -212,7 +212,7 @@ class TwigExpand extends AbstractExtension
 	{
 		$config = request()->configInfo;
 
-		return isset($config[$key]) ? $config[$key] : null;
+		return $config[$key] ?? null;
 	}
 
 	/**
@@ -224,7 +224,7 @@ class TwigExpand extends AbstractExtension
 	{
 		$menus = request()->menuInfo;
 
-		return isset($menus[$name]) ? $menus[$name] : null;
+		return $menus[$name] ?? null;
 	}
 
 	/**
@@ -236,6 +236,6 @@ class TwigExpand extends AbstractExtension
 	{
 		$user = request()->userInfo;
 
-		return isset($user[$name]) ? $user[$name] : null;
+		return $user[$name] ?? null;
 	}
 }
