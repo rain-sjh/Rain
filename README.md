@@ -18,6 +18,16 @@ ThinkPHP 6.0
 * 对IDE更加友好
 * 统一和精简大量用法
 
+## 展示
+登录
+![Image text](https://raw.githubusercontent.com/625250353/Rain/master/public/static/rain/image/登录.png)
+首页
+![Image text](https://raw.githubusercontent.com/625250353/Rain/master/public/static/rain/image/首页.png)
+用户管理
+![Image text](https://raw.githubusercontent.com/625250353/Rain/master/public/static/rain/image/用户管理.png)
+系统设置
+![Image text](https://raw.githubusercontent.com/625250353/Rain/master/public/static/rain/image/系统设置.png)
+
 ## 安装
 
 ~~~
