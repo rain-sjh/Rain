@@ -51,11 +51,11 @@ class Auth extends Base
 				return error(406, '您输入的密码不正确!');
 			}
 
-			$token = md5(uniqid((string)rand(), true));
+			$token = md5(uniqid((string)mt_rand(), true));
 
 			$user = $User->find($user->id);
 			$user->token = $token;
-			$user->ip = getIP();
+			$user->ip = get_ip();
 			$user->save();
 
 			if (!empty($param['remember'])) {
