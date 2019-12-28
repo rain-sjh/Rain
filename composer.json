@@ -24,10 +24,11 @@
         "topthink/think-orm": "2.0.*",
         "topthink/think-multi-app": "^1.0",
         "topthink/think-view": "^1.0",
-        "sunjiahao/think-twig": "*",
         "topthink/think-captcha": "*",
         "ext-json": "*",
-        "topthink/think-trace": "^1.2"
+        "topthink/think-trace": "^1.2",
+        "rain-sjh/think-twig": "^1.2",
+        "twig/twig": "^3.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2"

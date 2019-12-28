@@ -3,12 +3,14 @@
         <img src="{{ config('site').logo }}" alt="" height="50">
     </a>
     <ul class="layui-nav layui-layout-left" lay-shrink="all">
-        {% for menu in menus('menu') if not menu.is_hide  %}
-            <li class="layui-nav-item {{ action(menu.id,'layui-this') }}">
-                <a href="{{ url(menu.path) }}">
-                    <i class="layui-icon">{{ menu.icon|raw }}</i> {{ menu.name }}
-                </a>
-            </li>
+        {% for menu in menus('menu') %}
+            {% if not menu.is_hide %}
+                <li class="layui-nav-item {{ active(menu.id,'layui-this') }}">
+                    <a href="{{ url(menu.path) }}">
+                        <i class="layui-icon">{{ menu.icon|raw }}</i> {{ menu.name }}
+                    </a>
+                </li>
+            {% endif %}
         {% endfor %}
     </ul>
     <ul class="layui-nav layui-layout-right">

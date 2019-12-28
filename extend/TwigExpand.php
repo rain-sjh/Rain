@@ -42,7 +42,7 @@ class TwigExpand extends AbstractExtension
 	{
 		return [
 			new TwigFunction('load', [$this, 'load']),
-			new TwigFunction('action', [$this, 'action'], ['is_safe' => ['html', 'javascript']]),
+			new TwigFunction('active', [$this, 'active'], ['is_safe' => ['html', 'javascript']]),
 			new TwigFunction('image', [$this, 'image']),
 			new TwigFunction('avatar', [$this, 'avatar']),
 			new TwigFunction('flash', [$this, 'flash'], ['is_safe' => ['html', 'javascript']]),
@@ -112,7 +112,7 @@ class TwigExpand extends AbstractExtension
 	 * @param string $select
 	 * @return string
 	 */
-	public function action($id = '', $select = '')
+	public function active($id = '', $select = '')
 	{
 		$Menu = new Menu();
 		$app = app('http')->getName();
@@ -227,7 +227,6 @@ class TwigExpand extends AbstractExtension
 	public function menus($name)
 	{
 		$menus = request()->menuInfo;
-
 		return $menus[$name] ?? null;
 	}
 

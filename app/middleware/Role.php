@@ -54,23 +54,19 @@ class Role
 	 */
 	public function handle(Request $request, Closure $next)
 	{
-		$request = $this->verifyToken($request);
-
-		$request = $this->verifyWhitelist($request);
-
-		$request = $this->config($request);
+		$this->verifyToken();
+		$this->verifyWhitelist();
+		$this->getConfig();
+		$request->userInfo = $this->user;
+		$request->menuInfo = $this->menus;
+		$request->configInfo = $this->config;
 		return $next($request);
 	}
 
 	/**
 	 * 验证TOKEN 并返回 用户信息
-	 * @param $request
-	 * @return mixed
-	 * @throws DataNotFoundException
-	 * @throws DbException
-	 * @throws ModelNotFoundException
 	 */
-	private function verifyToken($request)
+	private function verifyToken()
 	{
 		// 当cookie存在token信息则自动登录
 		if (!empty(cookie('token'))) {
@@ -85,19 +81,12 @@ class Role
 				->field('id,avatar,nickname,username,gender,token')
 				->find();
 		}
-		$request->userInfo = $this->user;
-		return $request;
 	}
 
 	/**
 	 * 登录权限管理
-	 * @param $request
-	 * @return Json|void
-	 * @throws DataNotFoundException
-	 * @throws DbException
-	 * @throws ModelNotFoundException
 	 */
-	private function verifyWhitelist($request)
+	private function verifyWhitelist()
 	{
 		// 当前应用
 		$app = app('http')->getName();
@@ -167,18 +156,12 @@ class Role
 				}
 			}
 		}
-
-		$request->menuInfo = $this->menus;
-
-		return $request;
 	}
 
 	/**
 	 *  获取系统配置
-	 * @param $request
-	 * @return array
 	 */
-	private function config($request)
+	private function getConfig()
 	{
 		$config = new Config();
 		$config = $config->column('content', 'key');
@@ -187,9 +170,6 @@ class Role
 			$item = json_decode($item, true);
 		}
 		unset($item);
-
 		$this->config = $config;
-		return $request->configInfo = $this->config;
 	}
-
 }

@@ -2,13 +2,13 @@
 <div class="layui-side layui-bg-black">
     <div class="layui-side-scroll">
         <ul class="layui-nav layui-nav-tree layui-bg-black" lay-shrink="all">
-            {% for tabs in menus('tabs') if not tabs.is_hide %}
-                <li class="layui-nav-item {{ action(tabs.id,tabs.data?'layui-nav-itemed':'layui-this') }}">
+            {% for tabs in menus('tabs') %}
+                <li class="layui-nav-item {{ active(tabs.id,tabs.data?'layui-nav-itemed':'layui-this') }}">
                     <a class="" href="{{ tabs.path?url(tabs.path):'javascript:' }}">{{ tabs.name }}</a>
                     {% if tabs.data %}
                         <dl class="layui-nav-child">
-                            {% for data in tabs.data if not data.is_hide %}
-                                <dd class="{{ action(data.id,'layui-this') }}">
+                            {% for data in tabs.data %}
+                                <dd class="{{ active(data.id,'layui-this') }}">
                                     <a href="{{ url(data.path) }}">{{ data.name }}</a>
                                 </dd>
                             {% endfor %}
