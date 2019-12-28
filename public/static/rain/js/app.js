@@ -45,14 +45,15 @@ $.Url = function (url = '') {
 $.Get = function (url, param = {}, $res) {
     if (url) {
         let getLoad = layer.load(2, {time: 3 * 1000});
-        $.get(url, param, function (res) {
+        return $.get(url, param, function (res) {
             layer.close(getLoad);
             if (res.code === 200) {
                 $.msg(res.msg);
-                return $res(res);
+                return $res ? $res(res.data) : '';
+            } else {
+                $.msg(res.msg, 2);
             }
-            return $.msg(res.msg, 2);
-        })
+        });
     }
 };
 
@@ -60,13 +61,14 @@ $.Get = function (url, param = {}, $res) {
 $.Post = function (url, param = [], $res) {
     if (url) {
         let postLoad = layer.load(2, {time: 3 * 1000});
-        $.post(url, param, function (res) {
+        return $.post(url, param, function (res) {
             layer.close(postLoad);
             if (res.code === 200) {
                 $.msg(res.msg);
-                return $res(res);
+                return $res ? $res(res.data) : '';
+            } else {
+                $.msg(res.msg, 2);
             }
-            return $.msg(res.msg, 2);
         })
     }
 };
@@ -135,17 +137,16 @@ $.Flow = function (selector, url) {
 
 // 删除一个内容
 $.Del = function (url, res) {
-    layer.confirm('确定要删除?', {
+    let param = {
         icon: 0,
         closeBtn: 0,
         btnAlign: 'c',
         title: false,
         btn: ['删除', '取消']
-    }, function (index) {
-        $.Post(url, '',function () {
-            $.Url();
-        });
+    };
+    layer.confirm('确定要删除?', param, function (index) {
         layer.close(index);
+        return $.Post(url);
     });
 };
 

@@ -15,6 +15,15 @@
             <div class="layui-card-body">
                 <form class="layui-form">
                     <table class="layui-table" lay-even="" lay-skin="row">
+                        <colgroup>
+                            <col width="20%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="20%">
+                            <col width="10%">
+                            <col width="20%">
+                            <col width="10%">
+                        </colgroup>
                         <thead>
                         <tr>
                             <th>昵称</th>
@@ -36,22 +45,22 @@
                                 <td>{{ user.username|default('-') }}</td>
                                 <td>{{ user.phone|default('-') }}</td>
                                 <td class="select-box">
-                                    <label>
-                                        <select class="select" lay-filter="competence">
+                                    <label class="layui-inline">
+                                        <select class="select layui-input-inline" lay-filter="competence">
                                             <option>游客</option>
-                                            <option selected>管理员</option>
+                                            {% for key,item in role %}
+                                                <option value="{{ key }}" {{ user.role == key??'selected' }}>{{ item }}</option>
+                                            {% endfor %}
                                         </select>
                                     </label>
                                 </td>
                                 <td>
-                                    <label>
-                                        <input type="checkbox" lay-skin="switch"
-                                               lay-text="启用|禁用" {{ user.status?'':'checked' }} lay-filter="status"
-                                               data-id="{{ user.id }}">
-                                    </label>
+                                    <input type="checkbox" lay-skin="switch"
+                                           lay-text="启用|禁用" {{ user.status?'':'checked' }} lay-filter="status"
+                                           data-id="{{ user.id }}">
                                 </td>
                                 <td>
-                                    {{ user.create_time }}<br>{{ user.ip|default('未知') }} ({{ user.ip|city }})
+                                    {#                                    {{ user.create_time }}<br>{{ user.ip|default('未知') }} ({{ user.ip|city }})#}
                                 </td>
                                 <td class="link-item">
                                     <button type="button" class="layui-btn layui-btn-primary layui-btn-sm"
@@ -73,8 +82,7 @@
         layui.use(['form'], function () {
             let form = layui.form;
             form.on('switch(status)', function (data) {
-                let userId = $(data.elem).data('id');
-                $.Get('{{ url('user/status') }}', {id: userId, status: data.elem.checked})
+                $.Get('{{ url('user/status') }}', {id: $(data.elem).data('id'), status: data.elem.checked})
             });
         });
     </script>

@@ -11,26 +11,29 @@
 namespace app\admin\controller;
 
 use app\model\User as UserModel;
+use app\model\Role;
 use app\Request;
 use think\db\exception\DbException;
 use think\response\Json;
-use think\response\View;
 
 class User
 {
 	/**
 	 * 用户列表
 	 * @param UserModel $User
-	 * @return View
+	 * @param Role $Role
+	 * @return string
 	 * @throws DbException
 	 */
-	public function list(UserModel $User)
+	public function list(UserModel $User,Role $Role)
 	{
 		$list = $User->order('id desc')
 			->paginate();
+		$role = $Role->column('name','code');
 
-		return view('list', [
-			'list' => $list
+		return display('list', [
+			'list' => $list,
+			'role' => $role
 		]);
 	}
 

@@ -20,18 +20,18 @@
     },
     "require": {
         "php": ">=7.1.0",
-        "topthink/framework": "6.0.*",
-        "topthink/think-orm": "2.0.*",
-        "topthink/think-multi-app": "^1.0",
-        "topthink/think-view": "^1.0",
+        "topthink/framework": "*",
+        "topthink/think-orm": "*",
+        "topthink/think-multi-app": "*",
+        "topthink/think-view": "*",
         "topthink/think-captcha": "*",
         "ext-json": "*",
-        "topthink/think-trace": "^1.2",
-        "rain-sjh/think-twig": "^1.2",
-        "twig/twig": "^3.0"
+        "topthink/think-trace": "*",
+        "rain-sjh/think-twig": "*",
+        "twig/twig": "*"
     },
     "require-dev": {
-        "symfony/var-dumper": "^4.2"
+        "symfony/var-dumper": "*"
     },
     "autoload": {
         "psr-4": {
