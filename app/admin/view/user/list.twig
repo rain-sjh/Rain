@@ -45,22 +45,18 @@
                                 <td>{{ user.username|default('-') }}</td>
                                 <td>{{ user.phone|default('-') }}</td>
                                 <td class="select-box">
-                                    <label class="layui-inline">
-                                        <select class="select layui-input-inline" lay-filter="competence">
-                                            <option>游客</option>
-                                            {% for key,item in role %}
-                                                <option value="{{ key }}" {{ user.role == key??'selected' }}>{{ item }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </label>
+                                    <select data-id="{{ user.id }}" class="select layui-input-inline" lay-filter="role">
+                                        {% for key,item in role %}
+                                            <option value="{{ key }}" {{ user.role == key?'selected' }}>{{ item }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </td>
                                 <td>
-                                    <input type="checkbox" lay-skin="switch"
-                                           lay-text="启用|禁用" {{ user.status?'':'checked' }} lay-filter="status"
-                                           data-id="{{ user.id }}">
+                                    <input data-id="{{ user.id }}" type="checkbox" lay-skin="switch"
+                                           lay-text="启用|禁用" {{ user.status?'':'checked' }} lay-filter="status">
                                 </td>
-                                <td>
-                                    {#                                    {{ user.create_time }}<br>{{ user.ip|default('未知') }} ({{ user.ip|city }})#}
+                                <td class="layui-text-center">
+                                    {{ user.create_time }}<br>{{ user.ip|default('未知') }} ({{ user.ip|city }})
                                 </td>
                                 <td class="link-item">
                                     <button type="button" class="layui-btn layui-btn-primary layui-btn-sm"
@@ -83,6 +79,9 @@
             let form = layui.form;
             form.on('switch(status)', function (data) {
                 $.Get('{{ url('user/status') }}', {id: $(data.elem).data('id'), status: data.elem.checked})
+            });
+            form.on('select(role)', function (data) {
+                $.Get('{{ url('user/role') }}', {id: $(data.elem).data('id'), role: data.value})
             });
         });
     </script>

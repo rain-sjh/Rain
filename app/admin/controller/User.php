@@ -87,6 +87,25 @@ class User
 	}
 
 	/**
+	 * 更改用户状态
+	 * @param $id
+	 * @param $role
+	 * @return Json
+	 */
+	public function role($id, $role)
+	{
+		if (empty($id)) {
+			return error(404,'用户ID不能为空');
+		}
+
+		$user = UserModel::getById($id);
+		$user->role = $role;
+		$user->save();
+
+		return success();
+	}
+
+	/**
 	 * 编辑用户信息
 	 * @param Request $request
 	 * @param UserModel $User
