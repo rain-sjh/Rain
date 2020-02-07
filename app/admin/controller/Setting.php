@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection CallableParameterUseCaseInTypeContextInspection */
 declare(strict_types=1);
 /**
  * 工具: PhpStorm
@@ -15,13 +15,13 @@ namespace app\admin\controller;
 use app\model\Config;
 use app\model\Menu;
 use Exception;
-use think\Console;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
+use think\App;
+use think\facade\View;
 use think\Request;
 use think\response\Json;
-use think\response\View;
 
 class Setting
 {
@@ -29,7 +29,7 @@ class Setting
 	 * 系统设置
 	 * @param Request $request
 	 * @param Config $config
-	 * @return Json|View
+	 * @return View|Json|\think\response\View
 	 * @throws DataNotFoundException
 	 * @throws DbException
 	 * @throws ModelNotFoundException
@@ -58,7 +58,7 @@ class Setting
 	/**
 	 * 菜单列表
 	 * @param Menu $Menu
-	 * @return View
+	 * @return View|\think\response\View
 	 * @throws DataNotFoundException
 	 * @throws DbException
 	 * @throws ModelNotFoundException
@@ -82,7 +82,7 @@ class Setting
 	 * 添加菜单
 	 * @param Menu $menu
 	 * @param int $id
-	 * @return Json|View
+	 * @return View|Json|\think\response\View
 	 */
 	public function addMenu(Menu $menu, $id = 0)
 	{
@@ -103,7 +103,7 @@ class Setting
 	 * 修改菜单
 	 * @param Menu $menu
 	 * @param int $id
-	 * @return Json|View
+	 * @return Json|\think\response\View
 	 * @throws DataNotFoundException
 	 * @throws DbException
 	 * @throws ModelNotFoundException
@@ -149,9 +149,56 @@ class Setting
 		return error(406, '请逐级删除!');
 	}
 
-	public function clear(Console $console)
+	/**
+	 * 系统优化
+	 * @return \think\response\View
+	 */
+	public function optimization()
 	{
-		$a = $console->call('clear', ['--log','--dir'])->fetch();
-		dd($a);
+		return view('optimization');
+	}
+
+	/**
+	 * 清理缓存
+	 * @param App $app
+	 * @return Json
+	 */
+	public function flushCache(App $app)
+	{
+		$runtime = $app->getRootPath() . 'runtime';
+		$list = scandir($runtime);
+		foreach ($list as $item) {
+			if (!in_array($item, ['.', '..', '.gitignore', 'session'])) {
+				$this->clear($runtime . '/' . $item . '/');
+				rmdir($runtime . '/' . $item);
+			}
+		}
+		return success('', '刷新成功!');
+	}
+
+	/**
+	 * @param $path
+	 */
+	private function clear($path){
+		//如果是目录则继续
+		if(is_dir($path)){
+			//扫描一个文件夹内的所有文件夹和文件并返回数组
+			$p = scandir($path);
+			foreach($p as $val){
+				//排除目录中的.和..
+				if($val !== '.' && $val !== '..'){
+					//如果是目录则递归子目录，继续操作
+					if(is_dir($path.$val)){
+						//子目录中操作删除文件夹和文件
+						$this->clear($path.$val.'/');
+						//目录清空后删除空文件夹
+						rmdir($path.$val.'/');
+					}else{
+						//如果是文件直接删除
+						unlink($path.$val);
+					}
+				}
+			}
+		}
 	}
 }

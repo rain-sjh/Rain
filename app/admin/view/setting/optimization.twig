@@ -1,0 +1,43 @@
+{#
+ * 工具: PhpStorm
+ * 作者: 孙家浩
+ * 邮箱: yulian1024@vip.qq.com
+ * 日期: 2020/1/17
+ * 时间: 11:41
+ * 侵权必究
+ #}
+ 
+ 
+{% extends "layout.twig" %}
+
+{% block side %}
+    {% include 'widget/side.twig' %}
+{% endblock %}
+
+{% set tab_title = '系统优化' %}
+
+{% block main %}
+    <div class="layui-card" style="border:1px solid #e2e2e2">
+        <div class="layui-card-header layui-bg-gray">刷新缓存</div>
+        <div class="layui-card-body">
+            <span>刷新并重建缓存,让系统保持最优的状态。</span>
+            <button type="button" class="layui-right layui-btn layui-btn-sm layui-btn-normal" onclick="flushCache()">刷新缓存</button>
+        </div>
+    </div>
+
+    <div class="layui-card" style="border:1px solid #e2e2e2">
+        <div class="layui-card-header layui-bg-gray">优化磁盘空间</div>
+        <div class="layui-card-body">
+            <span>移除系统的临时数据，释放出更多磁盘空间。</span>
+            <button type="button" class="layui-right layui-btn layui-btn-sm layui-btn-normal">优化磁盘空间</button>
+        </div>
+    </div>
+{% endblock %}                                      
+
+{% block js %}
+    <script>
+        function flushCache() {
+            $.Post('{{ url('flushCache') }}');
+        }
+    </script>
+{% endblock %}

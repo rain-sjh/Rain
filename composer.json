@@ -1,13 +1,15 @@
 {
     "name": "rain-sjh/think-rain",
-    "description": "the new thinkphp framework",
+    "description": "雨点 PHP 后台管理系统",
     "type": "project",
     "keywords": [
+        "rain",
+        "admin",
         "framework",
         "thinkphp",
         "ORM"
     ],
-    "homepage": "http://thinkphp.cn/",
+    "homepage": "https://github.com/rain-sjh/Rain",
     "license": "Apache-2.0",
     "authors": [
         {
@@ -16,10 +18,10 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/rain-sjh/think-rain"
+        "issues": "https://github.com/rain-sjh/Rain"
     },
     "require": {
-        "php": ">=7.1.0",
+        "php": ">=7.2.0",
         "topthink/framework": "*",
         "topthink/think-orm": "*",
         "topthink/think-multi-app": "*",
@@ -31,6 +33,7 @@
         "twig/twig": "*"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-master",
         "symfony/var-dumper": "*"
     },
     "autoload": {
