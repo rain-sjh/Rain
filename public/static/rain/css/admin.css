@@ -26,6 +26,14 @@
     padding: 15px;
 }
 
+.layui-text-left {
+    text-align: left;
+}
+
+.layui-text-right {
+    text-align: right;
+}
+
 .layui-text-center {
     text-align: center;
 }
@@ -41,4 +49,11 @@
 .layui-footer {
     text-align: center;
     left: 0 !important;
+}
+
+#notice li:hover #notice_manage{
+    display: block;
+}
+#notice_manage{
+    display: none;
 }

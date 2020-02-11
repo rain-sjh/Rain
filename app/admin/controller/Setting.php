@@ -161,7 +161,6 @@ class Setting
 	/**
 	 * 清理缓存
 	 * @param App $app
-	 * @return Json
 	 */
 	public function flushCache(App $app)
 	{

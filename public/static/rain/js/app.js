@@ -106,7 +106,7 @@ $.Form = function (name = '*', url = '', res) {
                 url = window.location.href;
             }
             $.Post(url, data.field, function (e) {
-                return res(e)
+                return res ? res(e) : '';
             });
             return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
         });
@@ -119,9 +119,10 @@ $.Flow = function (selector, url) {
         let flow = layui.flow;
         flow.load({
             elem: selector,
+            scrollElem: $(selector).parent(),
             isAuto: true,
             done: function (page, next) { //到达临界点（默认滚动触发），触发下一页
-                var list = [];
+                let list = [];
                 //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
                 $.get(url, {page: page}, function (res) {
                     //假设你的列表返回在data集合中
@@ -146,7 +147,7 @@ $.Del = function (url, res) {
     };
     layer.confirm('确定要删除?', param, function (index) {
         layer.close(index);
-        return $.Post(url);
+        return $.Post(url,{_method:'DELETE'},res);
     });
 };
 

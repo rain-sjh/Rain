@@ -120,6 +120,14 @@ class Role
 		return error(401);
 	}
 
+	/**
+	 * 权限管理
+	 * @param Request $request
+	 * @param RoleModel $Role
+	 * @param Menu $Menu
+	 * @param $id
+	 * @return View
+	 */
 	public function rule(Request $request, RoleModel $Role, Menu $Menu, $id)
 	{
 		$list = [];
@@ -136,7 +144,7 @@ class Role
 					'children' => $children,
 				];
 			}
-			dd($list);
+//			dd($list);
 		}
 
 		return view('rule', [
@@ -144,6 +152,12 @@ class Role
 		]);
 	}
 
+	/**
+	 * 获取列表
+	 * @param Menu $Menu
+	 * @param int $id
+	 * @return array
+	 */
 	private function getParent(Menu $Menu, $id = 0)
 	{
 		$menus = $Menu->where('parent_id', 0)

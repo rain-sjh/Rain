@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpDynamicAsStaticMethodCallInspection */
+declare(strict_types=1);
 /**
  * 工具: PhpStorm
  * 作者: 孙家浩
@@ -15,6 +17,7 @@ use app\model\Role;
 use app\Request;
 use think\db\exception\DbException;
 use think\response\Json;
+use think\response\View;
 
 class User
 {
@@ -76,7 +79,7 @@ class User
 		}
 
 		$user = UserModel::getById($id);
-		if ($status == 'true') {
+		if ($status === 'true') {
 			$user->status = 0;
 		} else {
 			$user->status = 1;

@@ -6,12 +6,15 @@ use think\response\Json;
 
 /**
  * 接口成功返回
- * @param array $data
- * @param string $msg
+ * @param mixed $data
+ * @param mixed $msg
  * @return Json
  */
 function success($data = [], $msg = '请求成功!')
 {
+	if (is_string($data)) {
+		$msg = $data;
+	}
 	return json([
 		'code' => 200,
 		'msg' => $msg,

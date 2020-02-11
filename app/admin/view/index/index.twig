@@ -5,6 +5,7 @@
 {% block body %}
     {% include 'widget/header.twig' %}
 
+    <!--suppress SpellCheckingInspection -->
     <div class="layui-body layui-box" style="left: 0;">
         <div class="layui-container">
             <div class="layui-row layui-col-space10">
@@ -29,43 +30,17 @@
                 </div>
                 <div class="layui-col-md6">
                     <div class="layui-card">
-                        <div class="layui-card-header">状态栏</div>
+                        <div class="layui-card-header">系统信息</div>
                         <div class="layui-card-body">
                             <div class="site-tree">
                                 <table class="layui-table">
                                     <tbody>
-                                    <tr>
-                                        <td>操作系统</td>
-                                        <td>{{ system.operating_system }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>运行环境</td>
-                                        <td>{{ system.runtime_environment }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>ThinkPHP版本</td>
-                                        <td>{{ system.thinkphp_version }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>上传附件限制</td>
-                                        <td>{{ system.upload_limit }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>执行时间限制</td>
-                                        <td>{{ system.execution_time_limit }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>服务器时间</td>
-                                        <td>{{ system.server_time }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>北京时间</td>
-                                        <td>{{ system.beijing_time }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>剩余空间</td>
-                                        <td>{{ system.free_space }}</td>
-                                    </tr>
+                                    {% for item in system %}
+                                        <tr>
+                                            <td>{{ item.title }}</td>
+                                            <td>{{ item.name }}</td>
+                                        </tr>
+                                    {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -77,7 +52,9 @@
             <div class="layui-row layui-col-space10">
                 <div class="layui-col-md12">
                     <div class="layui-card">
-                        <div class="layui-card-header">今日数据</div>
+                        <div class="layui-card-header">
+                            <a href="{{ url('test')}}">今日数据</a>
+                        </div>
                         <div class="layui-card-body">
                             <div id="main" style="width: 100%;height:300px"></div>
                         </div>
@@ -112,15 +89,18 @@
 
 {% block js %}
     <script>
-        $.Flow('#notice', '{{ url('notice/list') }}');
+        $(function () {
+            $.Flow('#notice', '{{ url('notice/list') }}');
+        })
     </script>
+{#
     <script src="{{ load('echarts-4.3.0/echarts.js') }}"></script>
     <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'));
+        // let myChart = echarts.init(document.getElementById('main'));
 
         // 指定图表的配置项和数据
-        var option = {
+        let option = {
             title: {
                 text: '折线图测试'
             },
@@ -184,6 +164,7 @@
         };
 
         // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
+        // myChart.setOption(option);
     </script>
+#}
 {% endblock %}

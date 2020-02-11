@@ -1,10 +1,20 @@
 {% for item in list %}
-    <li class="layui-timeline-item">
+    <li id="notice_{{ item.id }}" class="layui-timeline-item">
         <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
         <div class="layui-timeline-content layui-text">
             <h3 class="layui-timeline-title">{{ item.title }}</h3>
-            <p>{{ item.content }}</p>
-            <div>{{ item.create_time }}</div>
+            <p class="content">{{ item.content }}</p>
+            <div class="layui-row">
+                <div class="layui-col-md10 time">{{ item.create_time }}</div>
+                <div id="notice_manage" class="layui-col-md2 layui-btn-group">
+                    <button class="layui-btn layui-btn-normal layui-btn-xs" onclick="$.Modal('{{ url('edit',{id:item.id}) }}')">
+                        <i class="layui-icon">&#xe642;</i>
+                    </button>
+                    <button class="layui-btn layui-btn-danger layui-btn-xs" onclick="$.Del('{{ url('del',{id:item.id}) }}',function() {$.Url()})">
+                        <i class="layui-icon">&#xe640;</i>
+                    </button>
+                </div>
+            </div>
         </div>
     </li>
 {% endfor %}
