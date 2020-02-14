@@ -64,7 +64,7 @@ class Auth extends Base
 
 			session('token', $token);
 
-			return success('', '登录成功!');
+			return success('登录成功!');
 		}
 
 		if (!empty($request->userInfo)) {
@@ -87,7 +87,7 @@ class Auth extends Base
 	{
 		session('token', false);
 		cache('token', false);
-		return success('', '退出成功!');
+		return success('退出成功!');
 	}
 
 }

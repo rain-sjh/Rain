@@ -65,7 +65,7 @@ $.Post = function (url, param = [], $res) {
             layer.close(postLoad);
             if (res.code === 200) {
                 $.msg(res.msg);
-                return $res ? $res(res.data) : '';
+                $res ? $res(res.data) : '';
             } else {
                 $.msg(res.msg, 2);
             }

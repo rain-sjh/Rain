@@ -60,7 +60,7 @@ class Role
 
 			$Role->save($param);
 
-			return success('', '添加完成!');
+			return success('添加完成!');
 		}
 		return view('add');
 	}
@@ -83,7 +83,7 @@ class Role
 			$role = $Role->find($param['id']);
 			$role->save($param);
 
-			return success('', '修改成功!');
+			return success('修改成功!');
 		}
 
 		$role = $Role->find($id);
@@ -114,7 +114,7 @@ class Role
 			$role = $Role->find($id);
 			$role->delete();
 
-			return success('', '删除成功!');
+			return success('删除成功!');
 		}
 
 		return error(401);

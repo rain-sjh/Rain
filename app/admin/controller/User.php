@@ -128,7 +128,7 @@ class User
 				$param['password'] = password_hash($param['password'], PASSWORD_BCRYPT);
 			}
 			$user->save($param);
-			return success(false,'保存成功');
+			return success('保存成功');
 		}
 		return view('edit',[
 			'user' => $user

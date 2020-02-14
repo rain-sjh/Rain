@@ -14,6 +14,7 @@ function success($data = [], $msg = '请求成功!')
 {
 	if (is_string($data)) {
 		$msg = $data;
+        $data = [];
 	}
 	return json([
 		'code' => 200,

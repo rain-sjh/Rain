@@ -47,7 +47,7 @@ class Setting
 			$site->content = $param;
 			$site->save();
 
-			return success('', '信息保存成功');
+			return success('信息保存成功');
 		}
 
 		return view('', [
@@ -92,7 +92,7 @@ class Setting
 			if (empty($menu->id)) {
 				return error(403, '保存出错了!');
 			}
-			return success('', '添加成功!');
+			return success('添加成功!');
 		}
 		return view('', [
 			'id' => $id
@@ -117,7 +117,7 @@ class Setting
 			if (empty($menu->id)) {
 				return error(403, '保存出错了!');
 			}
-			return success('', '修改成功!');
+			return success('修改成功!');
 		}
 
 		return view('', [
@@ -144,7 +144,7 @@ class Setting
 		$child = $Menu->getByParentId($menu->id);
 		if (empty($child)) {
 			$menu->delete();
-			return success('', '删除成功!');
+			return success('删除成功!');
 		}
 		return error(406, '请逐级删除!');
 	}
@@ -158,10 +158,11 @@ class Setting
 		return view('optimization');
 	}
 
-	/**
-	 * 清理缓存
-	 * @param App $app
-	 */
+    /**
+     * 清理缓存
+     * @param App $app
+     * @return Json
+     */
 	public function flushCache(App $app)
 	{
 		$runtime = $app->getRootPath() . 'runtime';
@@ -172,7 +173,7 @@ class Setting
 				rmdir($runtime . '/' . $item);
 			}
 		}
-		return success('', '刷新成功!');
+		return success('刷新成功!');
 	}
 
 	/**
